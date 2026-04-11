@@ -15,18 +15,19 @@ A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof
 
 | Model | Context | Vision | Reasoning | Input $/M | Output $/M |
 |-------|---------|--------|-----------|-----------|------------|
+| DeepSeek V3.2 | 164K | ❌ | ❌ | $0.28 | $0.38 |
+| Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
+| GLM 4.7 | 203K | ❌ | ❌ | $0.25 | $1.10 |
+| GLM 5 | 203K | ❌ | ❌ | $0.48 | $1.90 |
+| GLM 5.1 | 203K | ❌ | ❌ | $0.50 | $2.10 |
+| GLM 5.1 Precision | 203K | ❌ | ❌ | $0.70 | $2.50 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 Lightning | 131K | ❌ | ✅ | $1.00 | $3.00 |
-| GLM 5.1 | 202K | ❌ | ❌ | $0.50 | $2.10 |
-| GLM 5.1 Precision | 202K | ❌ | ❌ | $0.70 | $2.50 |
-| GLM 5 | 202K | ❌ | ❌ | $0.48 | $1.90 |
-| GLM 4.7 | 202K | ❌ | ❌ | $0.25 | $1.10 |
-| GLM 4.7 Flash | 202K | ❌ | ❌ | **Free** | **Free** |
-| Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
-| MiniMax M2.5 | 204K | ❌ | ❌ | $0.11 | $0.95 |
+| MiniMax M2.5 | 205K | ❌ | ❌ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
+| GLM 4.7 Flash | 203K | ❌ | ❌ | **Free** | **Free** |
 | Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
-| DeepSeek V3.2 | 163K | ❌ | ❌ | $0.28 | $0.38 |
+
 
 ## Installation
 
