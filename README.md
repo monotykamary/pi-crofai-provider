@@ -1,0 +1,93 @@
+# pi-crof-provider
+
+A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof.ai) as a custom model provider.
+
+## Features
+
+- **OpenAI-compatible API** - Uses CrofAI's `/v1/chat/completions` endpoint
+- **Reasoning models** - Support for thinking models with `reasoning_effort` parameter
+- **Vision models** - Image input support on Kimi K2.5 and Gemma 4 31B
+- **Tool use** - Function calling support
+- **Streaming** - Real-time token streaming
+- **Free tier** - Some models available at no cost (GLM 4.7 Flash, Qwen3.5 9B)
+
+## Available Models
+
+| Model | Context | Vision | Reasoning | Input $/M | Output $/M |
+|-------|---------|--------|-----------|-----------|------------|
+| Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
+| Kimi K2.5 Lightning | 131K | ❌ | ✅ | $1.00 | $3.00 |
+| GLM 5.1 | 202K | ❌ | ❌ | $0.50 | $2.10 |
+| GLM 5.1 Precision | 202K | ❌ | ❌ | $0.70 | $2.50 |
+| GLM 5 | 202K | ❌ | ❌ | $0.48 | $1.90 |
+| GLM 4.7 | 202K | ❌ | ❌ | $0.25 | $1.10 |
+| GLM 4.7 Flash | 202K | ❌ | ❌ | **Free** | **Free** |
+| Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
+| MiniMax M2.5 | 204K | ❌ | ❌ | $0.11 | $0.95 |
+| Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
+| Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
+| DeepSeek V3.2 | 163K | ❌ | ❌ | $0.28 | $0.38 |
+
+## Installation
+
+### 1. Clone or download this repository
+
+```bash
+git clone https://github.com/yourusername/pi-crof-provider.git
+# or download and extract the zip
+```
+
+### 2. Set your API key
+
+```bash
+export CROFAI_API_KEY=your-api-key-here
+```
+
+Get your API key from [crof.ai](https://crof.ai).
+
+### 3. Run pi with the extension
+
+```bash
+pi -e /path/to/pi-crof-provider
+```
+
+Or add to your `~/.pi/config.json`:
+
+```json
+{
+  "extensions": [
+    "/path/to/pi-crof-provider"
+  ]
+}
+```
+
+## Usage
+
+Once loaded, select a model with:
+
+```
+/model crofai kimi-k2.5
+```
+
+Or use `/models` to browse all available CrofAI models.
+
+### Reasoning Effort
+
+For reasoning models, control thinking depth:
+
+```
+/reasoning high
+```
+
+Values: `none`, `low`, `medium`, `high`
+
+## API Documentation
+
+- CrofAI Docs: https://crof.ai/docs
+- OpenAI-compatible endpoint: `https://crof.ai/v1`
+- Models endpoint: `https://crof.ai/v1/models`
+- Usage endpoint: `https://crof.ai/usage_api/`
+
+## License
+
+MIT
