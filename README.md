@@ -29,35 +29,58 @@ A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof
 | Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
 
 
+
+
 ## Installation
 
-### 1. Clone or download this repository
+### Option 1: Using `pi install` (Recommended)
+
+Install directly from GitHub:
 
 ```bash
-git clone https://github.com/yourusername/pi-crof-provider.git
-# or download and extract the zip
+pi install git:github.com/monotykamary/pi-crofai-provider
 ```
 
-### 2. Set your API key
-
+Then set your API key and run pi:
 ```bash
 export CROFAI_API_KEY=your-api-key-here
+pi
 ```
 
 Get your API key from [crof.ai](https://crof.ai).
 
-### 3. Run pi with the extension
+### Option 2: Manual Clone
 
-```bash
-pi -e /path/to/pi-crof-provider
-```
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/monotykamary/pi-crofai-provider.git
+   cd pi-crofai-provider
+   ```
 
-Or add to your `~/.pi/config.json`:
+2. Set your CrofAI API key:
+   ```bash
+   export CROFAI_API_KEY=your-api-key-here
+   ```
+
+3. Run pi with the extension:
+   ```bash
+   pi -e /path/to/pi-crofai-provider
+   ```
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `CROFAI_API_KEY` | Yes | Your CrofAI API key from [crof.ai](https://crof.ai) |
+
+## Configuration
+
+Add to your pi configuration for automatic loading:
 
 ```json
 {
   "extensions": [
-    "/path/to/pi-crof-provider"
+    "/path/to/pi-crofai-provider"
   ]
 }
 ```
