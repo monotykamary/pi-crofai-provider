@@ -163,10 +163,12 @@ function updateReadme(models) {
 
   // Find and replace the model table within the Available Models section
   // Match the table header row and all subsequent table rows (lines starting with |)
-  const tableRegex = /(## Available Models\n\n)\| Model \| Context \| Vision \| Reasoning \| Input \$\/M \| Output \$\/M \|\n\|[-| ]+\|(\n\|[^\n]+\|)*/;
+  // Also capture trailing newlines to preserve spacing
+  const tableRegex = /(## Available Models\n\n)\| Model \| Context \| Vision \| Reasoning \| Input \$\/M \| Output \$\/M \|\n\|[-| ]+\|(\n\|[^\n]+\|)*\n*/;
 
   if (tableRegex.test(readme)) {
     // Use a replacer function to avoid $ being interpreted as regex group reference
+    // Add single blank line after table (standard markdown spacing before next heading)
     readme = readme.replace(tableRegex, (match, header) => `${header}${newTable}\n\n`);
     fs.writeFileSync(README_PATH, readme);
     console.log('✓ Updated README.md');
