@@ -28,7 +28,6 @@ A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof
 | GLM 4.7 Flash | 203K | ❌ | ❌ | **Free** | **Free** |
 | Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
 
-
 ## Installation
 
 ### Option 1: Using `pi install` (Recommended)
