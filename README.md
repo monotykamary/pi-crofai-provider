@@ -20,9 +20,10 @@ A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof
 | GLM 4.7 | 203K | ❌ | ❌ | $0.25 | $1.10 |
 | GLM 5 | 203K | ❌ | ❌ | $0.48 | $1.90 |
 | GLM 5.1 | 203K | ❌ | ❌ | $0.50 | $2.10 |
-| GLM 5.1 Precision | 203K | ❌ | ❌ | $0.70 | $2.50 |
+| GLM 5.1 (Precision) | 203K | ❌ | ❌ | $0.70 | $2.50 |
+| Greg | 200K | ❌ | ❌ | $0.30 | $0.30 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
-| Kimi K2.5 Lightning | 131K | ❌ | ✅ | $1.00 | $3.00 |
+| Kimi K2.5 (Lightning) | 131K | ❌ | ✅ | $1.00 | $3.00 |
 | MiniMax M2.5 | 205K | ❌ | ❌ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
 | GLM 4.7 Flash | 203K | ❌ | ❌ | **Free** | **Free** |
