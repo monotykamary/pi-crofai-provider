@@ -82,7 +82,7 @@
   },
   {
     "id": "glm-5.1-precision",
-    "name": "CrofAI: GLM 5.1 Precision",
+    "name": "CrofAI: GLM 5.1 (Precision)",
     "reasoning": false,
     "input": [
       "text"
@@ -115,7 +115,7 @@
   },
   {
     "id": "kimi-k2.5-lightning",
-    "name": "CrofAI: Kimi K2.5 Lightning",
+    "name": "CrofAI: Kimi K2.5 (Lightning)",
     "reasoning": true,
     "input": [
       "text"
