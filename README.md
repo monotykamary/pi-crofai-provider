@@ -26,6 +26,7 @@ A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof
 | Kimi K2.5 (Lightning) | 131K | ❌ | ✅ | $1.00 | $3.00 |
 | MiniMax M2.5 | 205K | ❌ | ❌ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
+| Qwen3.5 9B (Chat) | 262K | ❌ | ✅ | $0.04 | $0.15 |
 | GLM 4.7 Flash | 203K | ❌ | ❌ | **Free** | **Free** |
 | Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
 
