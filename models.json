@@ -178,6 +178,22 @@
     "maxTokens": 262144
   },
   {
+    "id": "qwen3.5-9b-chat",
+    "name": "CrofAI: Qwen3.5 9B (Chat)",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.04,
+      "output": 0.15,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "contextWindow": 262144,
+    "maxTokens": 262144
+  },
+  {
     "id": "glm-4.7-flash",
     "name": "CrofAI: GLM 4.7 Flash",
     "reasoning": false,
