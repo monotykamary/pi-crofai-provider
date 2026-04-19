@@ -72,7 +72,7 @@
       "text"
     ],
     "cost": {
-      "input": 0.5,
+      "input": 0.45,
       "output": 2.1,
       "cacheRead": 0,
       "cacheWrite": 0
@@ -88,8 +88,8 @@
       "text"
     ],
     "cost": {
-      "input": 0.7,
-      "output": 2.5,
+      "input": 0.8,
+      "output": 2.9,
       "cacheRead": 0,
       "cacheWrite": 0
     },
