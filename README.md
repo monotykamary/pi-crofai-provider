@@ -1,6 +1,6 @@
 # pi-crof-provider
 
-A [pi](https://github.com/badlogic/pi) extension that adds [CrofAI](https://crof.ai) as a custom model provider.
+A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https://crof.ai) as a custom model provider.
 
 ## Features
 
