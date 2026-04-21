@@ -146,6 +146,22 @@
     "maxTokens": 32768
   },
   {
+    "id": "kimi-k2.6-precision",
+    "name": "CrofAI: Kimi K2.6 Precision",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.55,
+      "output": 2.7,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "contextWindow": 262144,
+    "maxTokens": 262144
+  },
+  {
     "id": "minimax-m2.5",
     "name": "CrofAI: MiniMax M2.5",
     "reasoning": false,
