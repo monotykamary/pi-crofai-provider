@@ -24,6 +24,7 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | Greg | 200K | ❌ | ❌ | $0.30 | $0.30 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ❌ | ✅ | $1.00 | $3.00 |
+| Kimi K2.6 | 262K | ❌ | ✅ | $0.50 | $1.99 |
 | Kimi K2.6 Precision | 262K | ❌ | ✅ | $0.55 | $2.70 |
 | MiniMax M2.5 | 205K | ❌ | ❌ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
