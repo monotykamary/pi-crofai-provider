@@ -67,10 +67,8 @@ function transformModel(apiModel) {
     inputTypes.push('image');
   }
 
-  // Use API name but prefix with "CrofAI: "
-  let displayName = apiModel.name.startsWith('CrofAI:')
-    ? apiModel.name
-    : `CrofAI: ${apiModel.name.replace(/^[^:]+:\s*/, '')}`;
+  // Use API name as-is, preserving the original name
+  let displayName = apiModel.name.replace(/^[^:]+:\s*/, '');
 
   // Deduplicate names: if multiple models have same name, append ID variant
   // e.g., "Kimi K2.5" and "Kimi K2.5 Lightning" when API returns same base name

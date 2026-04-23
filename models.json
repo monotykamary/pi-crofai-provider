@@ -1,7 +1,7 @@
 [
   {
     "id": "deepseek-v3.2",
-    "name": "CrofAI: DeepSeek V3.2",
+    "name": "DeepSeek V3.2",
     "reasoning": false,
     "input": [
       "text"
@@ -17,7 +17,7 @@
   },
   {
     "id": "gemma-4-31b-it",
-    "name": "CrofAI: Gemma 4 31B IT",
+    "name": "Gemma 4 31B IT",
     "reasoning": true,
     "input": [
       "text",
@@ -34,7 +34,7 @@
   },
   {
     "id": "glm-4.7",
-    "name": "CrofAI: GLM 4.7",
+    "name": "GLM 4.7",
     "reasoning": false,
     "input": [
       "text"
@@ -50,7 +50,7 @@
   },
   {
     "id": "glm-5",
-    "name": "CrofAI: GLM 5",
+    "name": "GLM 5",
     "reasoning": false,
     "input": [
       "text"
@@ -66,7 +66,7 @@
   },
   {
     "id": "glm-5.1",
-    "name": "CrofAI: GLM 5.1",
+    "name": "GLM 5.1",
     "reasoning": false,
     "input": [
       "text"
@@ -82,7 +82,7 @@
   },
   {
     "id": "glm-5.1-precision",
-    "name": "CrofAI: GLM 5.1 (Precision)",
+    "name": "GLM 5.1 (Precision)",
     "reasoning": false,
     "input": [
       "text"
@@ -98,7 +98,7 @@
   },
   {
     "id": "greg",
-    "name": "CrofAI: Greg",
+    "name": "Greg",
     "reasoning": false,
     "input": [
       "text"
@@ -114,7 +114,7 @@
   },
   {
     "id": "kimi-k2.5",
-    "name": "CrofAI: Kimi K2.5",
+    "name": "Kimi K2.5",
     "reasoning": true,
     "input": [
       "text",
@@ -131,7 +131,7 @@
   },
   {
     "id": "kimi-k2.5-lightning",
-    "name": "CrofAI: Kimi K2.5 (Lightning)",
+    "name": "Kimi K2.5 (Lightning)",
     "reasoning": true,
     "input": [
       "text"
@@ -147,7 +147,7 @@
   },
   {
     "id": "kimi-k2.6",
-    "name": "CrofAI: Kimi K2.6",
+    "name": "Kimi K2.6",
     "reasoning": true,
     "input": [
       "text"
@@ -163,7 +163,7 @@
   },
   {
     "id": "kimi-k2.6-precision",
-    "name": "CrofAI: Kimi K2.6 Precision",
+    "name": "Kimi K2.6 Precision",
     "reasoning": true,
     "input": [
       "text"
@@ -179,7 +179,7 @@
   },
   {
     "id": "minimax-m2.5",
-    "name": "CrofAI: MiniMax M2.5",
+    "name": "MiniMax M2.5",
     "reasoning": false,
     "input": [
       "text"
@@ -195,7 +195,7 @@
   },
   {
     "id": "qwen3.5-397b-a17b",
-    "name": "CrofAI: Qwen3.5 397B A17B",
+    "name": "Qwen3.5 397B A17B",
     "reasoning": true,
     "input": [
       "text"
@@ -211,7 +211,7 @@
   },
   {
     "id": "qwen3.5-9b-chat",
-    "name": "CrofAI: Qwen3.5 9B (Chat)",
+    "name": "Qwen3.5 9B (Chat)",
     "reasoning": true,
     "input": [
       "text"
@@ -227,7 +227,7 @@
   },
   {
     "id": "glm-4.7-flash",
-    "name": "CrofAI: GLM 4.7 Flash",
+    "name": "GLM 4.7 Flash",
     "reasoning": false,
     "input": [
       "text"
@@ -243,7 +243,7 @@
   },
   {
     "id": "qwen3.5-9b",
-    "name": "CrofAI: Qwen3.5 9B",
+    "name": "Qwen3.5 9B",
     "reasoning": true,
     "input": [
       "text"
