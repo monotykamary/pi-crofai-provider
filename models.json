@@ -16,6 +16,22 @@
     "maxTokens": 163840
   },
   {
+    "id": "deepseek-v4-pro",
+    "name": "DeepSeek V4 Pro",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 1.15,
+      "output": 3,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "contextWindow": 1000000,
+    "maxTokens": 131072
+  },
+  {
     "id": "gemma-4-31b-it",
     "name": "Gemma 4 31B IT",
     "reasoning": true,
@@ -163,7 +179,7 @@
   },
   {
     "id": "kimi-k2.6-precision",
-    "name": "Kimi K2.6 Precision",
+    "name": "Kimi K2.6 (Precision)",
     "reasoning": true,
     "input": [
       "text"
@@ -219,6 +235,22 @@
     "cost": {
       "input": 0.04,
       "output": 0.15,
+      "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "contextWindow": 262144,
+    "maxTokens": 262144
+  },
+  {
+    "id": "qwen3.6-27b",
+    "name": "Qwen3.6 27B",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.2,
+      "output": 1.5,
       "cacheRead": 0,
       "cacheWrite": 0
     },
