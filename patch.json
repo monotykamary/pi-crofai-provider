@@ -1,0 +1,164 @@
+{
+  "deepseek-v4-pro": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "deepseek-v3.2": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-5.1": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-5.1-precision": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-5": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-4.7": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-4.7-flash": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "minimax-m2.5": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "gemma-4-31b-it": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k2.5": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k2.5-lightning": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k2.6": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k2.6-precision": {
+    "reasoning": true,
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "qwen3.5-397b-a17b": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "qwen3.5-9b": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "qwen3.5-9b-chat": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "qwen3.6-27b": {
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  }
+}

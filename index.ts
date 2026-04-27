@@ -4,6 +4,18 @@
  * Registers CrofAI (crof.ai) as a custom provider using the openai-completions API.
  * Base URL: https://crof.ai/v1
  *
+ * CrofAI proxies multiple model families (DeepSeek, GLM, Kimi, Qwen, MiniMax,
+ * Gemma, Greg) through an OpenAI-compatible API. The /v1/models endpoint does
+ * NOT reliably report reasoning capability — many models that support thinking
+ * are missing the `custom_reasoning` or `reasoning_effort` flags. The patch.json
+ * file corrects these discrepancies based on E2E testing.
+ *
+ * Key API differences from native providers:
+ *   - Uses `max_tokens` (NOT `max_completion_tokens`) — the latter is silently ignored
+ *   - All reasoning models return `reasoning_content` in OpenAI format
+ *   - Developer role is supported across all models
+ *   - `reasoning_effort` parameter is accepted by all reasoning models
+ *
  * Usage:
  *   # Option 1: Store in auth.json (recommended)
  *   # Add to ~/.pi/agent/auth.json:
@@ -16,7 +28,7 @@
  *   pi -e /path/to/pi-crof-provider
  *
  * Then use /model to select from available models like Kimi K2.5, GLM 5.1,
- * DeepSeek V3.2, Qwen3.5, MiniMax M2.5, and Gemma 4.
+ * DeepSeek V4 Pro, Qwen3.5, MiniMax M2.5, and Gemma 4.
  *
  * CrofAI Features:
  *   - OpenAI-compatible API (https://crof.ai/v1)
@@ -30,10 +42,11 @@
  */
 
 import type { ExtensionAPI, ModelRegistry } from "@mariozechner/pi-coding-agent";
-import models from "./models.json" with { type: "json" };
+import modelsData from "./models.json" with { type: "json" };
+import patchData from "./patch.json" with { type: "json" };
 
-// Pi's expected model structure
-interface PiModel {
+// Model data structure from models.json
+interface JsonModel {
   id: string;
   name: string;
   reasoning: boolean;
@@ -46,44 +59,72 @@ interface PiModel {
   };
   contextWindow: number;
   maxTokens: number;
-}
-
-// Transform JSON model to Pi's expected format
-// CrofAI pricing is in $/token, pi expects $/million tokens
-function transformModel(model: CrofModel): PiModel {
-  return {
-    id: model.id,
-    name: model.name,
-    reasoning: model.reasoning,
-    input: model.input,
-    cost: {
-      input: model.cost.input,
-      output: model.cost.output,
-      cacheRead: model.cost.cacheRead,
-      cacheWrite: model.cost.cacheWrite,
-    },
-    contextWindow: model.contextWindow,
-    maxTokens: model.maxTokens,
+  compat?: {
+    supportsDeveloperRole?: boolean;
+    supportsStore?: boolean;
+    maxTokensField?: "max_completion_tokens" | "max_tokens";
+    thinkingFormat?: "openai" | "zai" | "qwen" | "qwen-chat-template";
+    supportsReasoningEffort?: boolean;
   };
 }
 
-// CrofAI model data structure from JSON
-interface CrofModel {
-  id: string;
-  name: string;
-  reasoning: boolean;
-  input: ("text" | "image")[];
-  cost: {
-    input: number;      // $ per million input tokens
-    output: number;     // $ per million output tokens
-    cacheRead: number;  // $ per million cached tokens
-    cacheWrite: number; // $ per million cache write tokens
+// Patch override structure (keyed by model ID, sparse)
+interface PatchEntry {
+  name?: string;
+  reasoning?: boolean;
+  input?: string[];
+  cost?: {
+    input?: number;
+    output?: number;
+    cacheRead?: number;
+    cacheWrite?: number;
   };
-  contextWindow: number;
-  maxTokens: number;
+  contextWindow?: number;
+  maxTokens?: number;
+  compat?: Record<string, unknown>;
 }
 
-const piModels = (models as CrofModel[]).map(transformModel);
+type PatchData = Record<string, PatchEntry>;
+
+// Apply patch overrides on top of models.json data
+function applyPatch(models: JsonModel[], patch: PatchData): JsonModel[] {
+  return models.map((model) => {
+    const overrides = patch[model.id];
+    if (!overrides) return model;
+
+    // Deep merge compat, shallow merge everything else
+    const merged = { ...model };
+    if (overrides.compat && merged.compat) {
+      merged.compat = { ...merged.compat, ...overrides.compat };
+      delete overrides.compat;
+    }
+    if (overrides.compat) {
+      merged.compat = { ...(merged.compat || {}), ...overrides.compat };
+      delete overrides.compat;
+    }
+    if (overrides.cost) {
+      merged.cost = { ...merged.cost, ...overrides.cost };
+      delete overrides.cost;
+    }
+    Object.assign(merged, overrides);
+
+    // Remove thinkingFormat from non-reasoning models
+    if (!merged.reasoning && merged.compat?.thinkingFormat) {
+      delete merged.compat.thinkingFormat;
+    }
+    // Remove empty compat leftover
+    if (merged.compat && Object.keys(merged.compat).length === 0) {
+      delete merged.compat;
+    }
+
+    return merged;
+  });
+}
+
+const models = applyPatch(
+  modelsData as JsonModel[],
+  patchData as PatchData
+);
 
 // ─── API Key Resolution (via ModelRegistry) ────────────────────────────────────
 
@@ -121,6 +162,6 @@ export default function (pi: ExtensionAPI) {
     baseUrl: "https://crof.ai/v1",
     apiKey: "CROFAI_API_KEY",
     api: "openai-completions",
-    models: piModels,
+    models,
   });
 }

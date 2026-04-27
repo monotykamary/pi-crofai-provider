@@ -15,23 +15,23 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 
 | Model | Context | Vision | Reasoning | Input $/M | Output $/M |
 |-------|---------|--------|-----------|-----------|------------|
-| DeepSeek V3.2 | 164K | ❌ | ❌ | $0.28 | $0.38 |
-| DeepSeek V4 Pro | 1.0M | ❌ | ❌ | $1.15 | $3.00 |
+| DeepSeek V3.2 | 164K | ❌ | ✅ | $0.28 | $0.38 |
+| DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $1.15 | $3.00 |
 | Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
-| GLM 4.7 | 203K | ❌ | ❌ | $0.25 | $1.10 |
-| GLM 5 | 203K | ❌ | ❌ | $0.48 | $1.90 |
-| GLM 5.1 | 203K | ❌ | ❌ | $0.45 | $2.10 |
-| GLM 5.1 (Precision) | 203K | ❌ | ❌ | $0.80 | $2.90 |
+| GLM 4.7 | 203K | ❌ | ✅ | $0.25 | $1.10 |
+| GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
+| GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.10 |
+| GLM 5.1 (Precision) | 203K | ❌ | ✅ | $0.80 | $2.90 |
 | Greg | 200K | ❌ | ❌ | $0.30 | $0.30 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ❌ | ✅ | $1.00 | $3.00 |
 | Kimi K2.6 | 262K | ❌ | ✅ | $0.50 | $1.99 |
 | Kimi K2.6 (Precision) | 262K | ❌ | ✅ | $0.55 | $2.70 |
-| MiniMax M2.5 | 205K | ❌ | ❌ | $0.11 | $0.95 |
+| MiniMax M2.5 | 205K | ❌ | ✅ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
 | Qwen3.5 9B (Chat) | 262K | ❌ | ✅ | $0.04 | $0.15 |
 | Qwen3.6 27B | 262K | ❌ | ✅ | $0.20 | $1.50 |
-| GLM 4.7 Flash | 203K | ❌ | ❌ | **Free** | **Free** |
+| GLM 4.7 Flash | 203K | ❌ | ✅ | **Free** | **Free** |
 | Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
 
 ## Installation
@@ -130,6 +130,22 @@ For reasoning models, control thinking depth:
 ```
 
 Values: `none`, `low`, `medium`, `high`
+
+## API Compatibility
+
+The CrofAI proxy differs from native provider APIs in several ways. These are handled via `patch.json`:
+
+| Aspect | Native APIs | CrofAI |
+|--------|------------|--------|
+| Max tokens field | `max_completion_tokens` | `max_tokens` |
+| Thinking format | Varies (openai, zai, qwen-chat-template) | `openai` (always `reasoning_content`) |
+| Developer role | Varies per model | ✅ Supported on all models |
+| Reasoning effort | Varies per model | Accepted by all reasoning models |
+| `store` parameter | Varies | ❌ Not supported |
+
+> **Note:** The CrofAI `/v1/models` endpoint does **not** reliably report reasoning capability.
+> Many models that support thinking are missing the `custom_reasoning` or `reasoning_effort`
+> flags. `patch.json` corrects these based on E2E testing.
 
 ## API Documentation
 

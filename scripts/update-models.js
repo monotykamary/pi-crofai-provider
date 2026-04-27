@@ -3,8 +3,14 @@
  * Update CrofAI models from API
  *
  * Fetches models from https://crof.ai/v1/models and updates:
- * - models.json: Provider model definitions
- * - README.md: Model table in the Available Models section
+ * - models.json: Pure API model definitions (no patches baked in)
+ * - README.md: Model table with patch.json overrides applied
+ *
+ * models.json reflects the raw API data as-is. The CrofAI /v1/models API
+ * does NOT reliably report reasoning capability — many models that support
+ * thinking are missing the `custom_reasoning` or `reasoning_effort` flags.
+ * patch.json corrects these discrepancies at runtime (index.ts) and is also
+ * applied when generating the README table so the docs reflect reality.
  */
 
 import fs from 'fs';
@@ -15,17 +21,22 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const MODELS_API_URL = 'https://crof.ai/v1/models';
 const MODELS_JSON_PATH = path.join(__dirname, '..', 'models.json');
+const PATCH_JSON_PATH = path.join(__dirname, '..', 'patch.json');
 const README_PATH = path.join(__dirname, '..', 'README.md');
 
 // Models known to support vision (image input) - exact IDs only
+// CrofAI API doesn't report vision capability, so this is maintained manually.
+// NOTE: Kimi K2.6 does NOT support vision on CrofAI (returns 500 with image input)
 const VISION_MODEL_IDS = [
-  'kimi-k2.5', // base model has vision
-  'gemma-4-31b-it', // vision capable
+  'kimi-k2.5', // base model has vision (verified E2E)
+  'gemma-4-31b-it', // vision capable (verified E2E)
 ];
 
 // Models that explicitly do NOT have vision despite similar names
 const NO_VISION_MODEL_IDS = [
   'kimi-k2.5-lightning', // lightning variant is text-only
+  'kimi-k2.6',           // no vision on CrofAI (500 error with image input)
+  'kimi-k2.6-precision', // same family as kimi-k2.6
 ];
 
 /**
@@ -53,11 +64,53 @@ function convertPricing(apiPrice) {
 }
 
 /**
+ * Apply patch.json overrides on top of transformed models.
+ * Deep merges compat, shallow merges everything else.
+ */
+function applyPatch(models, patch) {
+  return models.map(model => {
+    const overrides = patch[model.id];
+    if (!overrides) return model;
+
+    const merged = { ...model };
+
+    // Deep merge compat
+    if (overrides.compat) {
+      merged.compat = { ...(merged.compat || {}), ...overrides.compat };
+      delete overrides.compat;
+    }
+
+    // Deep merge cost
+    if (overrides.cost) {
+      merged.cost = { ...merged.cost, ...overrides.cost };
+      delete overrides.cost;
+    }
+
+    // Shallow merge remaining fields (reasoning, input, name, etc.)
+    Object.assign(merged, overrides);
+
+    // Remove thinkingFormat from non-reasoning models
+    if (!merged.reasoning && merged.compat?.thinkingFormat) {
+      delete merged.compat.thinkingFormat;
+    }
+    // Remove empty compat leftover
+    if (merged.compat && Object.keys(merged.compat).length === 0) {
+      delete merged.compat;
+    }
+
+    return merged;
+  });
+}
+
+/**
  * Transform API model to local format
  */
 function transformModel(apiModel) {
   const modelId = apiModel.id;
   // Use API reasoning flags if available, fall back to name detection
+  // NOTE: The CrofAI API does NOT reliably report reasoning. Many models
+  // that support thinking are missing custom_reasoning or reasoning_effort
+  // flags. patch.json corrects these at runtime.
   const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
   const hasVision = isVisionModel(modelId);
 
@@ -204,18 +257,6 @@ async function main() {
 
     console.log(`✓ Fetched ${apiModels.length} models from API`);
 
-    // Transform models
-    const transformedModels = apiModels.map(transformModel);
-
-    // Sort models: non-free first (by input cost), then free models alphabetically
-    transformedModels.sort((a, b) => {
-      const aFree = a._meta.isFree;
-      const bFree = b._meta.isFree;
-      if (aFree && !bFree) return 1;
-      if (!aFree && bFree) return -1;
-      return a.id.localeCompare(b.id);
-    });
-
     // Load existing models for comparison
     let existingModels = [];
     try {
@@ -224,22 +265,51 @@ async function main() {
       // File might not exist or be invalid
     }
 
-    // Update models.json (without _meta fields)
-    const cleanModels = transformedModels.map(cleanModelForJson);
+    // Transform models from API (pure API data, no patches)
+    let apiTransformed = apiModels.map(transformModel);
+
+    // Sort models: non-free first (by input cost), then free models alphabetically
+    apiTransformed.sort((a, b) => {
+      const aFree = a._meta.isFree;
+      const bFree = b._meta.isFree;
+      if (aFree && !bFree) return 1;
+      if (!aFree && bFree) return -1;
+      return a.id.localeCompare(b.id);
+    });
+
+    // Update models.json — pure API data, no patches baked in
+    const cleanModels = apiTransformed.map(cleanModelForJson);
     fs.writeFileSync(MODELS_JSON_PATH, JSON.stringify(cleanModels, null, 2) + '\n');
-    console.log('✓ Updated models.json');
+    console.log('✓ Updated models.json (pure API data)');
 
-    // Update README.md
-    updateReadme(transformedModels);
+    // Load patch.json and apply to API models for README generation
+    let patch = {};
+    try {
+      patch = JSON.parse(fs.readFileSync(PATCH_JSON_PATH, 'utf8'));
+      console.log(`✓ Loaded ${Object.keys(patch).length} patch overrides from patch.json`);
+    } catch (e) {
+      console.warn('⚠ Could not load patch.json, README may show incorrect reasoning flags');
+    }
 
-    // Summary
+    // Patched models for README (reflects actual model behavior)
+    let patchedModels = apiTransformed;
+    if (Object.keys(patch).length > 0) {
+      patchedModels = applyPatch(apiTransformed.map(m => ({...m})), patch);
+      console.log('✓ Applied patch.json overrides for README');
+    }
+
+    // Update README.md with patched data
+    updateReadme(patchedModels);
+
+    // Summary (patched models reflect actual behavior)
     console.log('\n--- Summary ---');
-    console.log(`Total models: ${transformedModels.length}`);
-    console.log(`Reasoning models: ${transformedModels.filter(m => m.reasoning).length}`);
-    console.log(`Vision models: ${transformedModels.filter(m => m.input.includes('image')).length}`);
-    console.log(`Free models: ${transformedModels.filter(m => m._meta.isFree).length}`);
+    console.log(`Total models: ${patchedModels.length}`);
+    console.log(`Reasoning models (patched): ${patchedModels.filter(m => m.reasoning).length}`);
+    console.log(`Reasoning models (API raw):  ${apiTransformed.filter(m => m.reasoning).length}`);
+    console.log(`Vision models: ${patchedModels.filter(m => m.input.includes('image')).length}`);
+    console.log(`Free models: ${patchedModels.filter(m => m._meta.isFree).length}`);
 
-    const newIds = new Set(transformedModels.map(m => m.id));
+    const newIds = new Set(apiTransformed.map(m => m.id));
     const oldIds = new Set(existingModels.map(m => m.id));
 
     const added = [...newIds].filter(id => !oldIds.has(id));
@@ -253,7 +323,7 @@ async function main() {
     }
 
     // Show pricing changes
-    for (const model of transformedModels) {
+    for (const model of apiTransformed) {
       const oldModel = existingModels.find(m => m.id === model.id);
       if (oldModel) {
         const oldInput = oldModel.cost?.input || 0;
