@@ -238,6 +238,7 @@ export default function (pi: ExtensionAPI) {
         pi.registerProvider("crofai", {
           baseUrl: BASE_URL,
           apiKey: "CROFAI_API_KEY",
+          api: "openai-completions",
           models: applyPatch(freshBase, patchData as PatchData),
         });
       }
