@@ -235,7 +235,11 @@ export default function (pi: ExtensionAPI) {
     await resolveApiKey(ctx.modelRegistry);
     revalidateModels(cachedApiKey, embeddedModels).then((freshBase) => {
       if (freshBase) {
-        pi.registerProvider("crofai", { models: applyPatch(freshBase, patchData as PatchData) });
+        pi.registerProvider("crofai", {
+          baseUrl: BASE_URL,
+          apiKey: "CROFAI_API_KEY",
+          models: applyPatch(freshBase, patchData as PatchData),
+        });
       }
     });
   });
