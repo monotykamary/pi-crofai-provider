@@ -24,34 +24,6 @@ const MODELS_JSON_PATH = path.join(__dirname, '..', 'models.json');
 const PATCH_JSON_PATH = path.join(__dirname, '..', 'patch.json');
 const README_PATH = path.join(__dirname, '..', 'README.md');
 
-// Models known to support vision (image input) - exact IDs only
-// CrofAI API doesn't report vision capability, so this is maintained manually.
-// NOTE: Kimi K2.6 does NOT support vision on CrofAI (returns 500 with image input)
-const VISION_MODEL_IDS = [
-  'kimi-k2.5', // base model has vision (verified E2E)
-  'gemma-4-31b-it', // vision capable (verified E2E)
-];
-
-// Models that explicitly do NOT have vision despite similar names
-const NO_VISION_MODEL_IDS = [
-  'kimi-k2.5-lightning', // lightning variant is text-only
-  'kimi-k2.6',           // no vision on CrofAI (500 error with image input)
-  'kimi-k2.6-precision', // same family as kimi-k2.6
-];
-
-/**
- * Check if a model ID indicates vision capability
- */
-function isVisionModel(modelId) {
-  const lowerId = modelId.toLowerCase();
-  // Explicit exclusions first
-  if (NO_VISION_MODEL_IDS.some(id => lowerId === id.toLowerCase())) {
-    return false;
-  }
-  // Exact ID matches for vision support
-  return VISION_MODEL_IDS.some(id => lowerId === id.toLowerCase());
-}
-
 /**
  * Convert API pricing ($/token) to $/million tokens
  */
@@ -102,61 +74,54 @@ function applyPatch(models, patch) {
   });
 }
 
-/**
- * Transform API model to local format
- */
-function transformModel(apiModel) {
+function transformModel(apiModel, existingModelsMap) {
   const modelId = apiModel.id;
-  // Use API reasoning flags if available, fall back to name detection
-  // NOTE: The CrofAI API does NOT reliably report reasoning. Many models
-  // that support thinking are missing custom_reasoning or reasoning_effort
-  // flags. patch.json corrects these at runtime.
+
+  // Preserve existing curated data (reasoning, vision, compat, etc.)
+  if (existingModelsMap[modelId]) {
+    const existing = { ...existingModelsMap[modelId] };
+
+    // Update fields from API that may change
+    const inputCost = convertPricing(apiModel.pricing?.prompt);
+    const outputCost = convertPricing(apiModel.pricing?.completion);
+    const cacheReadCost = convertPricing(apiModel.pricing?.cache_prompt);
+
+    if (inputCost > 0) existing.cost.input = inputCost;
+    if (outputCost > 0) existing.cost.output = outputCost;
+    if (cacheReadCost > 0) existing.cost.cacheRead = cacheReadCost;
+    if (apiModel.context_length) existing.contextWindow = apiModel.context_length;
+    if (apiModel.max_completion_tokens) existing.maxTokens = apiModel.max_completion_tokens;
+
+    // Update reasoning from API flags (if available)
+    const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
+    if (hasReasoning) existing.reasoning = true;
+
+    return existing;
+  }
+
+  // New model — build from API data + sensible defaults
+  // Curate models.json manually after discovery for vision, reasoning, thinkingFormat, etc.
   const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
-  const hasVision = isVisionModel(modelId);
-
-  // Determine input types
-  const inputTypes = ['text'];
-  if (hasVision) {
-    inputTypes.push('image');
-  }
-
-  // Use API name as-is, preserving the original name
-  let displayName = apiModel.name.replace(/^[^:]+:\s*/, '');
-
-  // Deduplicate names: if multiple models have same name, append ID variant
-  // e.g., "Kimi K2.5" and "Kimi K2.5 Lightning" when API returns same base name
-  if (modelId.includes('-') && !displayName.toLowerCase().includes(modelId.split('-').pop().toLowerCase())) {
-    const variant = modelId.split('-').pop();
-    // Only append if variant adds meaningful distinction (not just version numbers)
-    if (!/^v?\d+\.?\d*$/.test(variant)) {
-      // Common acronyms that should be uppercase
-      const acronyms = { 'it': 'IT', 'fp8': 'FP8', 'awq': 'AWQ', 'gptq': 'GPTQ' };
-      const formattedVariant = acronyms[variant.toLowerCase()] ||
-        (variant.charAt(0).toUpperCase() + variant.slice(1).toLowerCase());
-      displayName = `${displayName} ${formattedVariant}`;
-    }
-  }
-
-  // Check if model is free (both input and output are 0)
   const inputCost = convertPricing(apiModel.pricing?.prompt);
   const outputCost = convertPricing(apiModel.pricing?.completion);
   const cacheReadCost = convertPricing(apiModel.pricing?.cache_prompt);
   const isFree = inputCost === 0 && outputCost === 0;
 
+  let displayName = apiModel.name.replace(/^[^:]+:\s*/, '');
+
   return {
     id: modelId,
     name: displayName,
     reasoning: hasReasoning,
-    input: inputTypes,
+    input: ['text'],
     cost: {
       input: inputCost,
       output: outputCost,
       cacheRead: cacheReadCost,
-      cacheWrite: 0, // Not provided by API
+      cacheWrite: 0,
     },
-    contextWindow: apiModel.context_length || apiModel.max_completion_tokens || 0,
+    contextWindow: apiModel.context_length || 0,
     maxTokens: apiModel.max_completion_tokens || apiModel.context_length || 0,
-    // Metadata for README generation
     _meta: {
       isFree,
       quantization: apiModel.quantization,
@@ -257,16 +222,20 @@ async function main() {
 
     console.log(`✓ Fetched ${apiModels.length} models from API`);
 
-    // Load existing models for comparison
+    // Load existing models.json — source of truth for curated specs
     let existingModels = [];
     try {
       existingModels = JSON.parse(fs.readFileSync(MODELS_JSON_PATH, 'utf8'));
     } catch (e) {
       // File might not exist or be invalid
     }
+    const existingModelsMap = {};
+    for (const m of existingModels) {
+      existingModelsMap[m.id] = m;
+    }
 
-    // Transform models from API (pure API data, no patches)
-    let apiTransformed = apiModels.map(transformModel);
+    // Transform models from API, preserving existing curated data
+    let apiTransformed = apiModels.map(m => transformModel(m, existingModelsMap));
 
     // Sort models: non-free first (by input cost), then free models alphabetically
     apiTransformed.sort((a, b) => {
