@@ -131,7 +131,8 @@ const LIVE_FETCH_TIMEOUT_MS = 8000;
 /** Transform a model from the CrofAI /v1/models API. custom_reasoning is unreliable. */
 function transformApiModel(apiModel: any): JsonModel | null {
   const pricing = apiModel.pricing || {};
-  const toPerM = (v: any) => (typeof v === "string" ? parseFloat(v) : (v || 0)) * 1_000_000;
+  // CrofAI API returns prices as $/million tokens (e.g., "0.28"), parse directly
+  const toPerM = (v: any) => Math.round((typeof v === "string" ? parseFloat(v) : (v || 0)) * 100) / 100;
   const name = (apiModel.name || apiModel.id).replace(/^[^:]+:\s*/, "");
   return {
     id: apiModel.id,
