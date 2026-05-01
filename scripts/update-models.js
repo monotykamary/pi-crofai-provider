@@ -25,14 +25,13 @@ const PATCH_JSON_PATH = path.join(__dirname, '..', 'patch.json');
 const README_PATH = path.join(__dirname, '..', 'README.md');
 
 /**
- * Convert API pricing ($/token) to $/million tokens
+ * Parse API pricing value. API returns prices as $/million tokens (e.g., "0.28").
  */
 function convertPricing(apiPrice) {
   if (!apiPrice) return 0;
-  // API returns as string like "0.00000038"
-  const pricePerToken = parseFloat(apiPrice);
-  // Round to avoid floating point precision issues (e.g., 0.09999999999999999)
-  return Math.round(pricePerToken * 1000000 * 100) / 100;
+  const price = parseFloat(apiPrice);
+  // Round to avoid floating point precision issues
+  return Math.round(price * 100) / 100;
 }
 
 /**
@@ -95,6 +94,13 @@ function transformModel(apiModel, existingModelsMap) {
     // Update reasoning from API flags (if available)
     const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
     if (hasReasoning) existing.reasoning = true;
+
+    // Ensure _meta exists (stripped from models.json but needed for README generation)
+    existing._meta = {
+      isFree: inputCost === 0 && outputCost === 0,
+      quantization: apiModel.quantization,
+      speed: apiModel.speed,
+    };
 
     return existing;
   }

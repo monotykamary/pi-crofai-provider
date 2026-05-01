@@ -9,23 +9,55 @@
     "cost": {
       "input": 0.28,
       "output": 0.38,
-      "cacheRead": 0,
+      "cacheRead": 0.06,
       "cacheWrite": 0
     },
     "contextWindow": 163840,
     "maxTokens": 163840
   },
   {
-    "id": "deepseek-v4-pro",
-    "name": "DeepSeek V4 Pro",
-    "reasoning": false,
+    "id": "deepseek-v4-flash",
+    "name": "DeepSeek V4 Flash",
+    "reasoning": true,
     "input": [
       "text"
     ],
     "cost": {
-      "input": 1.15,
-      "output": 3,
+      "input": 0.12,
+      "output": 0.21,
+      "cacheRead": 0.02,
+      "cacheWrite": 0
+    },
+    "contextWindow": 1000000,
+    "maxTokens": 131072
+  },
+  {
+    "id": "deepseek-v4-pro",
+    "name": "DeepSeek V4 Pro",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.4,
+      "output": 0.85,
       "cacheRead": 0,
+      "cacheWrite": 0
+    },
+    "contextWindow": 1000000,
+    "maxTokens": 131072
+  },
+  {
+    "id": "deepseek-v4-pro-precision",
+    "name": "DeepSeek V4 Pro (Precision)",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 1.25,
+      "output": 2.5,
+      "cacheRead": 0.25,
       "cacheWrite": 0
     },
     "contextWindow": 1000000,
@@ -42,7 +74,7 @@
     "cost": {
       "input": 0.1,
       "output": 0.3,
-      "cacheRead": 0,
+      "cacheRead": 0.02,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -58,7 +90,7 @@
     "cost": {
       "input": 0.25,
       "output": 1.1,
-      "cacheRead": 0,
+      "cacheRead": 0.05,
       "cacheWrite": 0
     },
     "contextWindow": 202752,
@@ -74,7 +106,7 @@
     "cost": {
       "input": 0.48,
       "output": 1.9,
-      "cacheRead": 0,
+      "cacheRead": 0.1,
       "cacheWrite": 0
     },
     "contextWindow": 202752,
@@ -83,14 +115,14 @@
   {
     "id": "glm-5.1",
     "name": "GLM 5.1",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
     "cost": {
       "input": 0.45,
       "output": 2.1,
-      "cacheRead": 0,
+      "cacheRead": 0.09,
       "cacheWrite": 0
     },
     "contextWindow": 202752,
@@ -99,14 +131,14 @@
   {
     "id": "glm-5.1-precision",
     "name": "GLM 5.1 (Precision)",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
     "cost": {
-      "input": 0.8,
+      "input": 0.75,
       "output": 2.9,
-      "cacheRead": 0,
+      "cacheRead": 0.15,
       "cacheWrite": 0
     },
     "contextWindow": 202752,
@@ -122,7 +154,7 @@
     "cost": {
       "input": 0.3,
       "output": 0.3,
-      "cacheRead": 0,
+      "cacheRead": 0.06,
       "cacheWrite": 0
     },
     "contextWindow": 200000,
@@ -139,7 +171,7 @@
     "cost": {
       "input": 0.35,
       "output": 1.7,
-      "cacheRead": 0,
+      "cacheRead": 0.07,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -155,7 +187,7 @@
     "cost": {
       "input": 1,
       "output": 3,
-      "cacheRead": 0,
+      "cacheRead": 0.2,
       "cacheWrite": 0
     },
     "contextWindow": 131072,
@@ -171,7 +203,7 @@
     "cost": {
       "input": 0.5,
       "output": 1.99,
-      "cacheRead": 0,
+      "cacheRead": 0.1,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -187,7 +219,7 @@
     "cost": {
       "input": 0.55,
       "output": 2.7,
-      "cacheRead": 0,
+      "cacheRead": 0.11,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -203,7 +235,7 @@
     "cost": {
       "input": 0.11,
       "output": 0.95,
-      "cacheRead": 0,
+      "cacheRead": 0.02,
       "cacheWrite": 0
     },
     "contextWindow": 204800,
@@ -219,7 +251,7 @@
     "cost": {
       "input": 0.35,
       "output": 1.75,
-      "cacheRead": 0,
+      "cacheRead": 0.07,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -235,7 +267,7 @@
     "cost": {
       "input": 0.04,
       "output": 0.15,
-      "cacheRead": 0,
+      "cacheRead": 0.01,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
@@ -251,7 +283,7 @@
     "cost": {
       "input": 0.2,
       "output": 1.5,
-      "cacheRead": 0,
+      "cacheRead": 0.04,
       "cacheWrite": 0
     },
     "contextWindow": 262144,
