@@ -22,6 +22,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODELS_API_URL = 'https://crof.ai/v1/models';
 const MODELS_JSON_PATH = path.join(__dirname, '..', 'models.json');
 const PATCH_JSON_PATH = path.join(__dirname, '..', 'patch.json');
+const CUSTOM_MODELS_JSON_PATH = path.join(__dirname, '..', 'custom-models.json');
 const README_PATH = path.join(__dirname, '..', 'README.md');
 
 /**
@@ -38,27 +39,59 @@ function convertPricing(apiPrice) {
  * Apply patch.json overrides on top of transformed models.
  * Deep merges compat, shallow merges everything else.
  */
-function applyPatch(models, patch) {
-  return models.map(model => {
-    const overrides = patch[model.id];
-    if (!overrides) return model;
+function applyPatch(model, patch) {
+  const result = { ...model };
+  if (patch.name !== undefined) result.name = patch.name;
+  if (patch.reasoning !== undefined) result.reasoning = patch.reasoning;
+  if (patch.input !== undefined) result.input = patch.input;
+  if (patch.contextWindow !== undefined) result.contextWindow = patch.contextWindow;
+  if (patch.maxTokens !== undefined) result.maxTokens = patch.maxTokens;
+  if (patch.cost) {
+    result.cost = {
+      input: patch.cost.input ?? result.cost.input,
+      output: patch.cost.output ?? result.cost.output,
+      cacheRead: patch.cost.cacheRead ?? result.cost.cacheRead,
+      cacheWrite: patch.cost.cacheWrite ?? result.cost.cacheWrite,
+    };
+  }
+  if (patch.compat) {
+    result.compat = { ...(result.compat || {}), ...patch.compat };
+  }
+  if (!result.reasoning && result.compat?.thinkingFormat) {
+    delete result.compat.thinkingFormat;
+  }
+  if (result.compat && Object.keys(result.compat).length === 0) {
+    delete result.compat;
+  }
+  return result;
+}
 
-    const merged = { ...model };
-
-    // Deep merge compat
-    if (overrides.compat) {
-      merged.compat = { ...(merged.compat || {}), ...overrides.compat };
-      delete overrides.compat;
+function buildModels(baseModels, customModels, patchData) {
+  const modelMap = new Map();
+  for (const model of baseModels) {
+    modelMap.set(model.id, model);
+  }
+  for (const [id, patchEntry] of Object.entries(patchData)) {
+    const existing = modelMap.get(id);
+    if (existing) {
+      modelMap.set(id, applyPatch(existing, patchEntry));
     }
-
-    // Deep merge cost
-    if (overrides.cost) {
-      merged.cost = { ...merged.cost, ...overrides.cost };
-      delete overrides.cost;
+  }
+  for (const model of customModels) {
+    const existing = modelMap.get(model.id);
+    const patchEntry = patchData[model.id];
+    if (existing && patchEntry) {
+      modelMap.set(model.id, applyPatch(model, patchEntry));
+    } else if (existing) {
+      modelMap.set(model.id, model);
+    } else if (patchEntry) {
+      modelMap.set(model.id, applyPatch(model, patchEntry));
+    } else {
+      modelMap.set(model.id, model);
     }
-
-    // Shallow merge remaining fields (reasoning, input, name, etc.)
-    Object.assign(merged, overrides);
+  }
+  return Array.from(modelMap.values());
+}
 
     // Remove thinkingFormat from non-reasoning models
     if (!merged.reasoning && merged.compat?.thinkingFormat) {
@@ -267,19 +300,23 @@ async function main() {
     }
 
     // Patched models for README (reflects actual model behavior)
-    let patchedModels = apiTransformed;
-    if (Object.keys(patch).length > 0) {
-      patchedModels = applyPatch(apiTransformed.map(m => ({...m})), patch);
-      console.log('✓ Applied patch.json overrides for README');
-    }
+    // Build full model list for README: base → patch → custom
+    const customModels = loadJson(CUSTOM_MODELS_JSON_PATH);
+    const readmeModels = buildModels(
+      apiTransformed,
+      Array.isArray(customModels) ? customModels : [],
+      patch
+    );
+    readmeModels.sort((a, b) => a.name.localeCompare(b.name));
+    console.log('✓ Built model list (base → patch → custom) for README');
 
     // Update README.md with patched data
-    updateReadme(patchedModels);
+    updateReadme(readmeModels);
 
-    // Summary (patched models reflect actual behavior)
+    // Summary
     console.log('\n--- Summary ---');
-    console.log(`Total models: ${patchedModels.length}`);
-    console.log(`Reasoning models (patched): ${patchedModels.filter(m => m.reasoning).length}`);
+    console.log(`Total models: ${readmeModels.length}`);
+    console.log(`Reasoning models (patched): ${readmeModels.filter(m => m.reasoning).length}`);
     console.log(`Reasoning models (API raw):  ${apiTransformed.filter(m => m.reasoning).length}`);
     console.log(`Vision models: ${patchedModels.filter(m => m.input.includes('image')).length}`);
     console.log(`Free models: ${patchedModels.filter(m => m._meta.isFree).length}`);

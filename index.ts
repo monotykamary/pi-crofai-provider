@@ -19,7 +19,9 @@
  * Model resolution strategy: Stale-While-Revalidate
  *   1. Serve stale immediately: disk cache → embedded models.json (zero-latency)
  *   2. Revalidate in background: live API /models → merge with embedded → cache → hot-swap
- *   3. patch.json is always applied on top of whichever source won
+ *   3. patch.json + custom-models.json applied on top of whichever source won
+ *
+ * Merge order: [live|cache|embedded] → apply patch.json → merge custom-models.json
  *
  * Usage:
  *   # Option 1: Store in auth.json (recommended)
@@ -40,6 +42,7 @@
 
 import type { ExtensionAPI, ModelRegistry } from "@mariozechner/pi-coding-agent";
 import modelsData from "./models.json" with { type: "json" };
+import customModelsData from "./custom-models.json" with { type: "json" };
 import patchData from "./patch.json" with { type: "json" };
 import fs from "fs";
 import os from "os";
@@ -88,35 +91,67 @@ type PatchData = Record<string, PatchEntry>;
 
 // ─── Patch Application ────────────────────────────────────────────────────────
 
-function applyPatch(models: JsonModel[], patch: PatchData): JsonModel[] {
-  return models.map((model) => {
-    const overrides = patch[model.id];
-    if (!overrides) return model;
+function applyPatch(model: JsonModel, patch: PatchEntry): JsonModel {
+  const result = { ...model };
 
-    const merged = { ...model };
-    if (overrides.compat && merged.compat) {
-      merged.compat = { ...merged.compat, ...overrides.compat };
-      delete overrides.compat;
-    }
-    if (overrides.compat) {
-      merged.compat = { ...(merged.compat || {}), ...overrides.compat };
-      delete overrides.compat;
-    }
-    if (overrides.cost) {
-      merged.cost = { ...merged.cost, ...overrides.cost };
-      delete overrides.cost;
-    }
-    Object.assign(merged, overrides);
+  if (patch.name !== undefined) result.name = patch.name;
+  if (patch.reasoning !== undefined) result.reasoning = patch.reasoning;
+  if (patch.input !== undefined) result.input = patch.input;
+  if (patch.contextWindow !== undefined) result.contextWindow = patch.contextWindow;
+  if (patch.maxTokens !== undefined) result.maxTokens = patch.maxTokens;
 
-    if (!merged.reasoning && merged.compat?.thinkingFormat) {
-      delete merged.compat.thinkingFormat;
-    }
-    if (merged.compat && Object.keys(merged.compat).length === 0) {
-      delete merged.compat;
-    }
+  if (patch.cost) {
+    result.cost = {
+      input: patch.cost.input ?? result.cost.input,
+      output: patch.cost.output ?? result.cost.output,
+      cacheRead: patch.cost.cacheRead ?? result.cost.cacheRead,
+      cacheWrite: patch.cost.cacheWrite ?? result.cost.cacheWrite,
+    };
+  }
+  if (patch.compat) {
+    result.compat = { ...(result.compat || {}), ...patch.compat };
+  }
 
-    return merged;
-  });
+  if (!result.reasoning && result.compat?.thinkingFormat) {
+    delete result.compat.thinkingFormat;
+  }
+  if (result.compat && Object.keys(result.compat).length === 0) {
+    delete result.compat;
+  }
+
+  return result;
+}
+
+/** Full pipeline: base models → patch → custom → result */
+function buildModels(base: JsonModel[], custom: JsonModel[], patch: PatchData): JsonModel[] {
+  const modelMap = new Map<string, JsonModel>();
+
+  for (const model of base) {
+    modelMap.set(model.id, model);
+  }
+
+  for (const [id, patchEntry] of Object.entries(patch)) {
+    const existing = modelMap.get(id);
+    if (existing) {
+      modelMap.set(id, applyPatch(existing, patchEntry));
+    }
+  }
+
+  for (const model of custom) {
+    const existing = modelMap.get(model.id);
+    const patchEntry = patch[model.id];
+    if (existing && patchEntry) {
+      modelMap.set(model.id, applyPatch(model, patchEntry));
+    } else if (existing) {
+      modelMap.set(model.id, model);
+    } else if (patchEntry) {
+      modelMap.set(model.id, applyPatch(model, patchEntry));
+    } else {
+      modelMap.set(model.id, model);
+    }
+  }
+
+  return Array.from(modelMap.values());
 }
 
 // ─── Stale-While-Revalidate Model Sync ────────────────────────────────────────
@@ -223,8 +258,11 @@ async function resolveApiKey(modelRegistry: ModelRegistry): Promise<void> {
 
 export default function (pi: ExtensionAPI) {
   const embeddedModels = modelsData as JsonModel[];
+  const customModels = customModelsData as JsonModel[];
+  const patches = patchData as PatchData;
+
   const staleBase = loadStaleModels(embeddedModels);
-  const staleModels = applyPatch(staleBase, patchData as PatchData);
+  const staleModels = buildModels(staleBase, customModels, patches);
 
   pi.registerProvider("crofai", {
     baseUrl: BASE_URL,
@@ -244,7 +282,7 @@ export default function (pi: ExtensionAPI) {
           baseUrl: BASE_URL,
           apiKey: "CROFAI_API_KEY",
           api: "openai-completions",
-          models: applyPatch(freshBase, patchData as PatchData),
+          models: buildModels(freshBase, customModels, patches),
         });
       }
     });
