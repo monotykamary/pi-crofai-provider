@@ -18,7 +18,7 @@
   {
     "id": "deepseek-v4-flash",
     "name": "DeepSeek V4 Flash",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
@@ -34,14 +34,14 @@
   {
     "id": "deepseek-v4-pro",
     "name": "DeepSeek V4 Pro",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
     "cost": {
       "input": 0.4,
       "output": 0.85,
-      "cacheRead": 0.08,
+      "cacheRead": 0,
       "cacheWrite": 0
     },
     "contextWindow": 1000000,
@@ -50,7 +50,7 @@
   {
     "id": "deepseek-v4-pro-precision",
     "name": "DeepSeek V4 Pro (Precision)",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
@@ -115,7 +115,7 @@
   {
     "id": "glm-5.1",
     "name": "GLM 5.1",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
@@ -131,7 +131,7 @@
   {
     "id": "glm-5.1-precision",
     "name": "GLM 5.1 (Precision)",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],

@@ -16,9 +16,9 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | Model | Context | Vision | Reasoning | Input $/M | Output $/M |
 |-------|---------|--------|-----------|-----------|------------|
 | DeepSeek V3.2 | 164K | ❌ | ✅ | $0.28 | $0.38 |
-| DeepSeek V4 Flash | 1.0M | ❌ | ❌ | $0.12 | $0.21 |
+| DeepSeek V4 Flash | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
 | DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.40 | $0.85 |
-| DeepSeek V4 Pro (Precision) | 1.0M | ❌ | ❌ | $1.25 | $2.50 |
+| DeepSeek V4 Pro (Precision) | 1.0M | ❌ | ✅ | $1.25 | $2.50 |
 | Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
 | GLM 4.7 | 203K | ❌ | ✅ | $0.25 | $1.10 |
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
