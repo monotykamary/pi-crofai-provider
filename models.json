@@ -68,8 +68,7 @@
     "name": "Gemma 4 31B IT",
     "reasoning": true,
     "input": [
-      "text",
-      "image"
+      "text"
     ],
     "cost": {
       "input": 0.1,

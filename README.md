@@ -6,7 +6,7 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 
 - **OpenAI-compatible API** - Uses CrofAI's `/v1/chat/completions` endpoint
 - **Reasoning models** - Support for thinking models with `reasoning_effort` parameter
-- **Vision models** - Image input support on Kimi K2.5 and Gemma 4 31B
+- **Vision models** - Image input support on Kimi K2.5, Kimi K2.6, GLM 5.1 (Precision), and Qwen 3.5 / 3.6
 - **Tool use** - Function calling support
 - **Streaming** - Real-time token streaming
 - **Free tier** - Some models available at no cost (GLM 4.7 Flash, Qwen3.5 9B)
@@ -19,22 +19,22 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | DeepSeek V4 Flash | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
 | DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.40 | $0.85 |
 | DeepSeek V4 Pro (Precision) | 1.0M | ❌ | ✅ | $1.25 | $2.50 |
-| Gemma 4 31B IT | 262K | ✅ | ✅ | $0.10 | $0.30 |
+| Gemma 4 31B IT | 262K | ❌ | ✅ | $0.10 | $0.30 |
 | GLM 4.7 | 203K | ❌ | ✅ | $0.25 | $1.10 |
+| GLM 4.7 Flash | 203K | ❌ | ✅ | **Free** | **Free** |
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
 | GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.10 |
-| GLM 5.1 (Precision) | 203K | ❌ | ✅ | $0.75 | $2.90 |
+| GLM 5.1 (Precision) | 203K | ✅ | ✅ | $0.75 | $2.90 |
 | Greg | 200K | ❌ | ❌ | $0.30 | $0.30 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
-| Kimi K2.5 (Lightning) | 131K | ❌ | ✅ | $1.00 | $3.00 |
-| Kimi K2.6 | 262K | ❌ | ✅ | $0.50 | $1.99 |
-| Kimi K2.6 (Precision) | 262K | ❌ | ✅ | $0.55 | $2.70 |
+| Kimi K2.5 (Lightning) | 131K | ✅ | ✅ | $1.00 | $3.00 |
+| Kimi K2.6 | 262K | ✅ | ✅ | $0.50 | $1.99 |
+| Kimi K2.6 (Precision) | 262K | ✅ | ✅ | $0.55 | $2.70 |
 | MiniMax M2.5 | 205K | ❌ | ✅ | $0.11 | $0.95 |
-| Qwen3.5 397B A17B | 262K | ❌ | ✅ | $0.35 | $1.75 |
-| Qwen3.5 9B (Chat) | 262K | ❌ | ✅ | $0.04 | $0.15 |
-| Qwen3.6 27B | 262K | ❌ | ✅ | $0.20 | $1.50 |
-| GLM 4.7 Flash | 203K | ❌ | ✅ | **Free** | **Free** |
-| Qwen3.5 9B | 262K | ❌ | ✅ | **Free** | **Free** |
+| Qwen3.5 397B A17B | 262K | ✅ | ✅ | $0.35 | $1.75 |
+| Qwen3.5 9B | 262K | ✅ | ✅ | **Free** | **Free** |
+| Qwen3.5 9B (Chat) | 262K | ✅ | ✅ | $0.04 | $0.15 |
+| Qwen3.6 27B | 262K | ✅ | ✅ | $0.20 | $1.50 |
 
 ## Installation
 

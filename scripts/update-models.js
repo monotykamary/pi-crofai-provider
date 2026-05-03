@@ -93,19 +93,6 @@ function buildModels(baseModels, customModels, patchData) {
   return Array.from(modelMap.values());
 }
 
-    // Remove thinkingFormat from non-reasoning models
-    if (!merged.reasoning && merged.compat?.thinkingFormat) {
-      delete merged.compat.thinkingFormat;
-    }
-    // Remove empty compat leftover
-    if (merged.compat && Object.keys(merged.compat).length === 0) {
-      delete merged.compat;
-    }
-
-    return merged;
-  });
-}
-
 function transformModel(apiModel, existingModelsMap) {
   const modelId = apiModel.id;
 
@@ -167,6 +154,18 @@ function transformModel(apiModel, existingModelsMap) {
       speed: apiModel.speed,
     },
   };
+}
+
+/**
+ * Load JSON file or return empty object on failure.
+ */
+function loadJson(filePath) {
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
 }
 
 /**
@@ -318,8 +317,8 @@ async function main() {
     console.log(`Total models: ${readmeModels.length}`);
     console.log(`Reasoning models (patched): ${readmeModels.filter(m => m.reasoning).length}`);
     console.log(`Reasoning models (API raw):  ${apiTransformed.filter(m => m.reasoning).length}`);
-    console.log(`Vision models: ${patchedModels.filter(m => m.input.includes('image')).length}`);
-    console.log(`Free models: ${patchedModels.filter(m => m._meta.isFree).length}`);
+    console.log(`Vision models: ${readmeModels.filter(m => m.input.includes('image')).length}`);
+    console.log(`Free models: ${readmeModels.filter(m => m._meta.isFree).length}`);
 
     const newIds = new Set(apiTransformed.map(m => m.id));
     const oldIds = new Set(existingModels.map(m => m.id));
