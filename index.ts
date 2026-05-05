@@ -2,10 +2,10 @@
  * CrofAI Provider Extension
  *
  * Registers CrofAI (crof.ai) as a custom provider using the openai-completions API.
- * Base URL: https://crof.ai/v1
+ * Base URL: https://beta.crof.ai/v1
  *
  * CrofAI proxies multiple model families (DeepSeek, GLM, Kimi, Qwen, MiniMax,
- * Gemma, Greg) through an OpenAI-compatible API. The /v1/models endpoint does
+ * Gemma, Greg, MiMo) through an OpenAI-compatible API. The /v1/models endpoint does
  * NOT reliably report reasoning capability — many models that support thinking
  * are missing the `custom_reasoning` or `reasoning_effort` flags. The patch.json
  * file corrects these discrepancies based on E2E testing.
@@ -35,7 +35,7 @@
  *   pi -e /path/to/pi-crof-provider
  *
  * Then use /model to select from available models like Kimi K2.5, GLM 5.1,
- * DeepSeek V4 Pro, Qwen3.5, MiniMax M2.5, and Gemma 4.
+ * DeepSeek V4 Pro, Qwen3.5, MiniMax M2.5, Gemma 4, and MiMo-V2.5-Pro.
  *
  * @see https://crof.ai/docs
  */
@@ -157,8 +157,8 @@ function buildModels(base: JsonModel[], custom: JsonModel[], patch: PatchData): 
 // ─── Stale-While-Revalidate Model Sync ────────────────────────────────────────
 
 const PROVIDER_ID = "crofai";
-const BASE_URL = "https://crof.ai/v1";
-const MODELS_URL = `${BASE_URL}/models`;
+const BASE_URL = "https://beta.crof.ai/v1";
+const MODELS_URL = `${BASE_URL}/models`; // https://beta.crof.ai/v1/models
 const CACHE_DIR = path.join(os.homedir(), ".pi", "agent", "cache");
 const CACHE_PATH = path.join(CACHE_DIR, `${PROVIDER_ID}-models.json`);
 const LIVE_FETCH_TIMEOUT_MS = 8000;
