@@ -167,13 +167,13 @@
       "text"
     ],
     "cost": {
-      "input": 0.3,
-      "output": 0.3,
-      "cacheRead": 0.06,
+      "input": 0.1,
+      "output": 0.2,
+      "cacheRead": 0.02,
       "cacheWrite": 0
     },
-    "contextWindow": 200000,
-    "maxTokens": 200000
+    "contextWindow": 229376,
+    "maxTokens": 229376
   },
   {
     "id": "kimi-k2.5",
@@ -307,22 +307,6 @@
   {
     "id": "qwen3.5-9b",
     "name": "Qwen3.5 9B",
-    "reasoning": true,
-    "input": [
-      "text"
-    ],
-    "cost": {
-      "input": 0.04,
-      "output": 0.15,
-      "cacheRead": 0.01,
-      "cacheWrite": 0
-    },
-    "contextWindow": 262144,
-    "maxTokens": 262144
-  },
-  {
-    "id": "qwen3.5-9b-chat",
-    "name": "Qwen3.5 9B (Chat)",
     "reasoning": true,
     "input": [
       "text"

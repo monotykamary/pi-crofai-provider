@@ -2,7 +2,7 @@
  * CrofAI Provider Extension
  *
  * Registers CrofAI (crof.ai) as a custom provider using the openai-completions API.
- * Base URL: https://beta.crof.ai/v1
+ * Base URL: https://crof.ai/v1
  *
  * CrofAI proxies multiple model families (DeepSeek, GLM, Kimi, Qwen, MiniMax,
  * Gemma, Greg, MiMo) through an OpenAI-compatible API. The /v1/models endpoint does
@@ -157,8 +157,8 @@ function buildModels(base: JsonModel[], custom: JsonModel[], patch: PatchData): 
 // ─── Stale-While-Revalidate Model Sync ────────────────────────────────────────
 
 const PROVIDER_ID = "crofai";
-const BASE_URL = "https://beta.crof.ai/v1";
-const MODELS_URL = `${BASE_URL}/models`; // https://beta.crof.ai/v1/models
+const BASE_URL = "https://crof.ai/v1";
+const MODELS_URL = `${BASE_URL}/models`; // https://crof.ai/v1/models
 const CACHE_DIR = path.join(os.homedir(), ".pi", "agent", "cache");
 const CACHE_PATH = path.join(CACHE_DIR, `${PROVIDER_ID}-models.json`);
 const LIVE_FETCH_TIMEOUT_MS = 8000;
