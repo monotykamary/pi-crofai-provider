@@ -293,10 +293,10 @@ async function fetchUsage(apiKey: string | undefined, signal?: AbortSignal): Pro
 function buildUsageStatusText(usage: Usage): string | undefined {
   const parts: string[] = [];
   if (usage.credits != null && usage.credits > 0) {
-    parts.push(`credits: ${formatCredits(usage.credits)}`);
+    parts.push(formatCredits(usage.credits));
   }
   if (usage.usable_requests != null) {
-    parts.push(`requests left: ${usage.usable_requests}`);
+    parts.push(`⇄ ${usage.usable_requests}`);
   }
   return parts.length > 0 ? parts.join(" | ") : undefined;
 }
