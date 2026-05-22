@@ -130,10 +130,15 @@ Or use `/models` to browse all available CrofAI models.
 For reasoning models, control thinking depth:
 
 ```
-/reasoning high
+/reasoning xhigh
 ```
 
-Values: `none`, `low`, `medium`, `high`
+Values: `none`, `minimal`, `low`, `medium`, `high`, `xhigh`
+
+> **Note:** CrofAI proxies to native DeepSeek API, which uses `"max"` for the highest
+> reasoning effort. The `xhigh` level is mapped to `"max"` via `thinkingLevelMap`
+> so your requests use the correct value. This mapping is configured in
+> `patch.json` and `models.json` for all DeepSeek models.
 
 ## Usage Status Bar
 

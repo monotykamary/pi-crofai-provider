@@ -1,6 +1,35 @@
 {
   "deepseek-v4-pro": {
     "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "deepseek-v4-flash": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "deepseek-v4-pro-precision": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",

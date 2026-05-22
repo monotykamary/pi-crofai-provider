@@ -2,7 +2,7 @@
   {
     "id": "deepseek-v3.2",
     "name": "DeepSeek V3.2",
-    "reasoning": false,
+    "reasoning": true,
     "input": [
       "text"
     ],
@@ -19,6 +19,9 @@
     "id": "deepseek-v4-flash",
     "name": "DeepSeek V4 Flash",
     "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
     "input": [
       "text"
     ],
@@ -35,6 +38,9 @@
     "id": "deepseek-v4-pro",
     "name": "DeepSeek V4 Pro",
     "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
     "input": [
       "text"
     ],
@@ -51,6 +57,9 @@
     "id": "deepseek-v4-pro-precision",
     "name": "DeepSeek V4 Pro (Precision)",
     "reasoning": true,
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    },
     "input": [
       "text"
     ],
