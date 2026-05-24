@@ -384,32 +384,30 @@ export default function (pi: ExtensionAPI) {
     revalidateAbort?.abort();
     revalidateAbort = new AbortController();
     const signal = revalidateAbort.signal;
-    await resolveApiKey(ctx.modelRegistry);
+    resolveApiKey(ctx.modelRegistry).then(async () => {
+      revalidateModels(cachedApiKey, embeddedModels, signal).then((freshBase) => {
+        if (freshBase && !signal.aborted) {
+          pi.registerProvider("crofai", {
+            baseUrl: BASE_URL,
+            apiKey: "CROFAI_API_KEY",
+            api: "openai-completions",
+            models: buildModels(freshBase, customModels, patches),
+          });
+        }
+      });
 
-    // Background: revalidate models
-    revalidateModels(cachedApiKey, embeddedModels, signal).then((freshBase) => {
-      if (freshBase && !signal.aborted) {
-        pi.registerProvider("crofai", {
-          baseUrl: BASE_URL,
-          apiKey: "CROFAI_API_KEY",
-          api: "openai-completions",
-          models: buildModels(freshBase, customModels, patches),
-        });
+      if (!isCrofaiModel(ctx)) {
+        clearUsageStatus(ctx);
+        return;
+      }
+
+      const usage = await fetchUsage(cachedApiKey, signal);
+      if (usage && !signal.aborted) {
+        sessionCredits = usage.credits;
+        sessionRequests = usage.usable_requests;
+        updateUsageStatus(ctx);
       }
     });
-
-    // Only show usage footer when using a CrofAI model
-    if (!isCrofaiModel(ctx)) {
-      clearUsageStatus(ctx);
-      return;
-    }
-
-    const usage = await fetchUsage(cachedApiKey, signal);
-    if (usage && !signal.aborted) {
-      sessionCredits = usage.credits;
-      sessionRequests = usage.usable_requests;
-      updateUsageStatus(ctx);
-    }
   });
 
   pi.on("model_select", async (event, ctx) => {
