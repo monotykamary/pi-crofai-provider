@@ -55,6 +55,7 @@ const USAGE_FETCH_TIMEOUT_MS = 5000;
 
 let sessionRequests: number | null = null;
 let sessionCredits: number | null = null;
+let sessionRequestCost: number | null = null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -352,6 +353,7 @@ function updateUsageStatus(ctx: any): void {
 function clearUsageStatus(ctx: any): void {
   sessionCredits = null;
   sessionRequests = null;
+  sessionRequestCost = null;
   ctx.ui.setStatus("crofai-usage", undefined);
 }
 
@@ -412,6 +414,8 @@ export default function (pi: ExtensionAPI) {
 
   pi.on("model_select", async (event, ctx) => {
     if (event.model?.provider === "crofai") {
+      // Reset cost cache — will be re-measured on first turn_end
+      sessionRequestCost = null;
       // Fetch and show usage when switching to a CrofAI model
       const usage = await fetchUsage(cachedApiKey);
       if (usage) {
@@ -421,13 +425,27 @@ export default function (pi: ExtensionAPI) {
       updateUsageStatus(ctx);
     } else {
       // Clear when switching away
+      sessionRequestCost = null;
       clearUsageStatus(ctx);
     }
   });
 
   pi.on("turn_end", async (_event, ctx) => {
     if (sessionRequests != null) {
-      sessionRequests = Math.max(0, sessionRequests - 1);
+      if (sessionRequestCost == null) {
+        // First turn after model selection — fetch actual usage to measure cost
+        const usage = await fetchUsage(cachedApiKey);
+        if (usage && usage.usable_requests != null) {
+          sessionRequestCost = Math.max(1, sessionRequests - usage.usable_requests);
+          sessionRequests = usage.usable_requests;
+        } else {
+          sessionRequestCost = 1;
+          sessionRequests = Math.max(0, sessionRequests - 1);
+        }
+      } else {
+        // Subsequent turns — use cached cost
+        sessionRequests = Math.max(0, sessionRequests - sessionRequestCost);
+      }
     }
     updateUsageStatus(ctx);
   });
