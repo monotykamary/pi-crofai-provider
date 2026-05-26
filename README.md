@@ -19,6 +19,7 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | DeepSeek V3.2 | 164K | ❌ | ✅ | $0.28 | $0.38 |
 | DeepSeek V4 Flash | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
 | DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.30 | $0.50 |
+| DeepSeek V4 Pro (Lightning) | 1.0M | ❌ | ✅ | $1.70 | $3.40 |
 | DeepSeek V4 Pro (Precision) | 1.0M | ❌ | ✅ | $0.70 | $1.40 |
 | Gemma 4 31B IT | 262K | ❌ | ✅ | $0.10 | $0.30 |
 | GLM 4.7 | 203K | ❌ | ✅ | $0.25 | $1.10 |
@@ -26,7 +27,6 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
 | GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.10 |
 | GLM 5.1 (Precision) | 203K | ✅ | ✅ | $0.75 | $2.90 |
-| Greg | 229K | ❌ | ❌ | $0.10 | $0.20 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ✅ | ✅ | $1.00 | $3.00 |
 | Kimi K2.6 | 262K | ✅ | ✅ | $0.50 | $1.99 |
@@ -37,6 +37,7 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | Qwen3.5 397B A17B | 262K | ✅ | ✅ | $0.35 | $1.75 |
 | Qwen3.5 9B | 262K | ✅ | ✅ | $0.04 | $0.15 |
 | Qwen3.6 27B | 262K | ✅ | ✅ | $0.20 | $1.50 |
+| testing model | 229K | ❌ | ❌ | $0.07 | $0.15 |
 
 ## Installation
 

@@ -19,9 +19,6 @@
     "id": "deepseek-v4-flash",
     "name": "DeepSeek V4 Flash",
     "reasoning": true,
-    "thinkingLevelMap": {
-      "xhigh": "max"
-    },
     "input": [
       "text"
     ],
@@ -38,9 +35,6 @@
     "id": "deepseek-v4-pro",
     "name": "DeepSeek V4 Pro",
     "reasoning": true,
-    "thinkingLevelMap": {
-      "xhigh": "max"
-    },
     "input": [
       "text"
     ],
@@ -54,12 +48,25 @@
     "maxTokens": 131072
   },
   {
+    "id": "deepseek-v4-pro-lightning",
+    "name": "DeepSeek V4 Pro (Lightning)",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 1.7,
+      "output": 3.4,
+      "cacheRead": 0.1,
+      "cacheWrite": 0
+    },
+    "contextWindow": 1000000,
+    "maxTokens": 131072
+  },
+  {
     "id": "deepseek-v4-pro-precision",
     "name": "DeepSeek V4 Pro (Precision)",
     "reasoning": true,
-    "thinkingLevelMap": {
-      "xhigh": "max"
-    },
     "input": [
       "text"
     ],
@@ -167,22 +174,6 @@
     },
     "contextWindow": 202752,
     "maxTokens": 202752
-  },
-  {
-    "id": "greg",
-    "name": "Greg",
-    "reasoning": false,
-    "input": [
-      "text"
-    ],
-    "cost": {
-      "input": 0.1,
-      "output": 0.2,
-      "cacheRead": 0.02,
-      "cacheWrite": 0
-    },
-    "contextWindow": 229376,
-    "maxTokens": 229376
   },
   {
     "id": "kimi-k2.5",
@@ -344,5 +335,21 @@
     },
     "contextWindow": 262144,
     "maxTokens": 262144
+  },
+  {
+    "id": "temptest",
+    "name": "testing model",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.07,
+      "output": 0.15,
+      "cacheRead": 0.01,
+      "cacheWrite": 0
+    },
+    "contextWindow": 229376,
+    "maxTokens": 229376
   }
 ]
