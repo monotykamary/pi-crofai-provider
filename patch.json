@@ -22,6 +22,11 @@
       "xhigh": "max"
     }
   },
+  "deepseek-v4-pro-lightning": {
+    "thinkingLevelMap": {
+      "xhigh": "max"
+    }
+  },
   "deepseek-v3.2": {
     "reasoning": true,
     "compat": {
