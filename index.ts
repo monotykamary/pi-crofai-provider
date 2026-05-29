@@ -372,7 +372,7 @@ export default function (pi: ExtensionAPI) {
 
   pi.registerProvider("crofai", {
     baseUrl: BASE_URL,
-    apiKey: "CROFAI_API_KEY",
+    apiKey: "$CROFAI_API_KEY",
     api: "openai-completions",
     models: staleModels,
   });
@@ -394,7 +394,7 @@ export default function (pi: ExtensionAPI) {
         if (freshBase && !signal.aborted) {
           pi.registerProvider("crofai", {
             baseUrl: BASE_URL,
-            apiKey: "CROFAI_API_KEY",
+            apiKey: "$CROFAI_API_KEY",
             api: "openai-completions",
             models: buildModels(freshBase, customModels, patches),
           });
