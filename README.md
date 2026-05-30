@@ -27,6 +27,10 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
 | GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.10 |
 | GLM 5.1 (Precision) | 203K | ✅ | ✅ | $0.75 | $2.90 |
+| Greg (Roleplay) | 229K | ❌ | ❌ | $0.10 | $0.30 |
+| Greg 1 Mini | 229K | ❌ | ❌ | $0.07 | $0.15 |
+| Greg 1 Normal | 229K | ❌ | ❌ | $0.10 | $0.30 |
+| Greg 1 Super | 229K | ❌ | ❌ | $1.00 | $5.00 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ✅ | ✅ | $1.00 | $3.00 |
 | Kimi K2.6 | 262K | ✅ | ✅ | $0.50 | $1.99 |
@@ -37,7 +41,6 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 | Qwen3.5 397B A17B | 262K | ✅ | ✅ | $0.35 | $1.75 |
 | Qwen3.5 9B | 262K | ✅ | ✅ | $0.04 | $0.15 |
 | Qwen3.6 27B | 262K | ✅ | ✅ | $0.20 | $1.50 |
-| testing model | 229K | ❌ | ❌ | $0.07 | $0.15 |
 
 ## Installation
 
