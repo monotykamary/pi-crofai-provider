@@ -16,28 +16,27 @@ A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https:/
 
 | Model | Context | Vision | Reasoning | Input $/M | Output $/M |
 |-------|---------|--------|-----------|-----------|------------|
-| DeepSeek V3.2 | 164K | ❌ | ✅ | $0.28 | $0.38 |
+| DeepSeek V3.2 | 164K | ❌ | ✅ | $0.18 | $0.35 |
 | DeepSeek V4 Flash | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
-| DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.30 | $0.50 |
-| DeepSeek V4 Pro (Lightning) | 1.0M | ❌ | ✅ | $1.70 | $3.40 |
-| DeepSeek V4 Pro (Precision) | 1.0M | ❌ | ✅ | $0.70 | $1.40 |
+| DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.35 | $0.80 |
+| DeepSeek V4 Pro (Lightning) | 1.0M | ❌ | ✅ | $0.80 | $1.60 |
 | Gemma 4 31B IT | 262K | ❌ | ✅ | $0.10 | $0.30 |
 | GLM 4.7 | 203K | ❌ | ✅ | $0.25 | $1.10 |
 | GLM 4.7 Flash | 203K | ❌ | ✅ | $0.04 | $0.30 |
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
-| GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.10 |
-| GLM 5.1 (Precision) | 203K | ✅ | ✅ | $0.75 | $2.90 |
+| GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.15 |
+| Greg (Roleplay) | 229K | ❌ | ❌ | $0.10 | $0.30 |
+| Greg 1 Mini | 229K | ❌ | ❌ | $0.07 | $0.15 |
+| Greg 1 Normal | 229K | ❌ | ❌ | $0.10 | $0.30 |
+| Greg 1 Super | 229K | ❌ | ❌ | $1.00 | $5.00 |
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ✅ | ✅ | $1.00 | $3.00 |
 | Kimi K2.6 | 262K | ✅ | ✅ | $0.50 | $1.99 |
-| Kimi K2.6 (Precision) | 262K | ✅ | ✅ | $0.55 | $2.70 |
-| MiMo-V2.5-Pro | 1.0M | ❌ | ✅ | $0.50 | $1.50 |
-| MiMo-V2.5-Pro (Precision) | 1.0M | ❌ | ✅ | $0.80 | $2.50 |
+| MiMo-V2.5-Pro | 1.0M | ❌ | ✅ | $0.40 | $0.80 |
 | MiniMax M2.5 | 205K | ❌ | ✅ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ✅ | ✅ | $0.35 | $1.75 |
 | Qwen3.5 9B | 262K | ✅ | ✅ | $0.04 | $0.15 |
 | Qwen3.6 27B | 262K | ✅ | ✅ | $0.20 | $1.50 |
-| testing model | 229K | ❌ | ❌ | $0.07 | $0.15 |
 
 ## Installation
 
