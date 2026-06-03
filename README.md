@@ -1,6 +1,17 @@
-# pi-crof-provider
+<div align="center">
 
-A [pi](https://github.com/badlogic/pi-mono) extension that adds [CrofAI](https://crof.ai) as a custom model provider.
+# 🔗 pi-crofai-provider
+
+**Open-weight models through [CrofAI](https://crof.ai)**
+
+_A [pi](https://github.com/earendil-works/pi-coding-agent) provider extension with reasoning, vision, and live usage status._
+
+[![pi extension](https://img.shields.io/badge/pi-extension-blueviolet)](https://github.com/earendil-works/pi-coding-agent)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+
+</div>
+
+---
 
 ## Features
 
