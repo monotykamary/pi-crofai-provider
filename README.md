@@ -43,6 +43,7 @@ _A [pi](https://github.com/earendil-works/pi-coding-agent) provider extension wi
 | Kimi K2.5 | 262K | ✅ | ✅ | $0.35 | $1.70 |
 | Kimi K2.5 (Lightning) | 131K | ✅ | ✅ | $1.00 | $3.00 |
 | Kimi K2.6 | 262K | ✅ | ✅ | $0.50 | $1.99 |
+| Kimi K2.7 Code | 262K | ❌ | ✅ | $0.55 | $2.25 |
 | MiMo-V2.5-Pro | 1.0M | ❌ | ✅ | $0.40 | $0.80 |
 | MiniMax M2.5 | 205K | ❌ | ✅ | $0.11 | $0.95 |
 | Qwen3.5 397B A17B | 262K | ✅ | ✅ | $0.35 | $1.75 |
