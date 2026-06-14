@@ -257,6 +257,22 @@
     "maxTokens": 262144
   },
   {
+    "id": "kimi-k2.7-code",
+    "name": "Kimi K2.7 Code",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.55,
+      "output": 2.25,
+      "cacheRead": 0.05,
+      "cacheWrite": 0
+    },
+    "contextWindow": 262144,
+    "maxTokens": 262144
+  },
+  {
     "id": "mimo-v2.5-pro",
     "name": "MiMo-V2.5-Pro",
     "reasoning": true,
