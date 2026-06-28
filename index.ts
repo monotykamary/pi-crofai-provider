@@ -425,7 +425,9 @@ export default function (pi: ExtensionAPI) {
     if (event.model?.provider === "crofai") {
       // Reset cost cache — will be re-measured on first turn_end
       sessionRequestCost = null;
-      // Fetch and show usage when switching to a CrofAI model
+      // ponytail: resolveApiKey in session_start races with model_select.
+      // Ensure key is resolved before fetching usage.
+      if (!cachedApiKey) await resolveApiKey(ctx.modelRegistry);
       const usage = await fetchUsage(cachedApiKey);
       if (usage) {
         sessionCredits = usage.credits;
@@ -443,6 +445,7 @@ export default function (pi: ExtensionAPI) {
     if (sessionRequests != null) {
       if (sessionRequestCost == null) {
         // First turn after model selection — fetch actual usage to measure cost
+        if (!cachedApiKey) await resolveApiKey(ctx.modelRegistry);
         const usage = await fetchUsage(cachedApiKey);
         if (usage && usage.usable_requests != null) {
           sessionRequestCost = Math.max(1, sessionRequests - usage.usable_requests);
