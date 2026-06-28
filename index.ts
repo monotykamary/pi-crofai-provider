@@ -178,8 +178,9 @@ const LIVE_FETCH_TIMEOUT_MS = 8000;
 /** Transform a model from the CrofAI /v1/models API. custom_reasoning is unreliable. */
 function transformApiModel(apiModel: any): JsonModel | null {
   const pricing = apiModel.pricing || {};
-  // CrofAI API returns prices as $/million tokens (e.g., "0.28"), parse directly
-  const toPerM = (v: any) => Math.round((typeof v === "string" ? parseFloat(v) : (v || 0)) * 100) / 100;
+  // CrofAI API returns prices as $/million tokens (e.g., "0.28", "0.003"), parse directly
+  // ponytail: 5 decimals preserves sub-cent cache prices like 0.003, old 2-decimal rounding lost them
+  const toPerM = (v: any) => Math.round((typeof v === "string" ? parseFloat(v) : (v || 0)) * 100000) / 100000;
   const name = (apiModel.name || apiModel.id).replace(/^[^:]+:\s*/, "");
   return {
     id: apiModel.id,
@@ -239,10 +240,15 @@ function mergeWithEmbedded(liveModels: JsonModel[], embeddedModels: JsonModel[])
     const embedded = embeddedMap.get(liveModel.id);
     seen.add(liveModel.id);
     if (embedded) {
+      // ponytail: live API pricing is authoritative. Only overlay curation fields
+      // (reasoning, input, compat) from embedded when the API can't supply them.
       result.push({
         ...liveModel,
-        ...embedded,
+        reasoning: liveModel.reasoning ?? embedded.reasoning,
+        input: liveModel.input ?? embedded.input,
+        compat: liveModel.compat ?? embedded.compat,
         contextWindow: liveModel.contextWindow || embedded.contextWindow,
+        maxTokens: liveModel.maxTokens || embedded.maxTokens,
       });
     } else {
       result.push(liveModel);

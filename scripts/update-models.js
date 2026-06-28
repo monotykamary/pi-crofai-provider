@@ -31,8 +31,8 @@ const README_PATH = path.join(__dirname, '..', 'README.md');
 function convertPricing(apiPrice) {
   if (!apiPrice) return 0;
   const price = parseFloat(apiPrice);
-  // Round to avoid floating point precision issues
-  return Math.round(price * 100) / 100;
+  // ponytail: 5 decimals preserves sub-cent cache prices like 0.003, old 2-decimal rounding lost them
+  return Math.round(price * 100000) / 100000;
 }
 
 /**
@@ -93,61 +93,35 @@ function buildModels(baseModels, customModels, patchData) {
   return Array.from(modelMap.values());
 }
 
+
+
 function transformModel(apiModel, existingModelsMap) {
   const modelId = apiModel.id;
-
-  // Preserve existing curated data (reasoning, vision, compat, etc.)
-  if (existingModelsMap[modelId]) {
-    const existing = { ...existingModelsMap[modelId] };
-
-    // Update fields from API that may change
-    const inputCost = convertPricing(apiModel.pricing?.prompt);
-    const outputCost = convertPricing(apiModel.pricing?.completion);
-    const cacheReadCost = convertPricing(apiModel.pricing?.cache_prompt);
-
-    if (inputCost > 0) existing.cost.input = inputCost;
-    if (outputCost > 0) existing.cost.output = outputCost;
-    if (cacheReadCost > 0) existing.cost.cacheRead = cacheReadCost;
-    if (apiModel.context_length) existing.contextWindow = apiModel.context_length;
-    if (apiModel.max_completion_tokens) existing.maxTokens = apiModel.max_completion_tokens;
-
-    // Update reasoning from API flags (if available)
-    const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
-    if (hasReasoning) existing.reasoning = true;
-
-    // Ensure _meta exists (stripped from models.json but needed for README generation)
-    existing._meta = {
-      isFree: inputCost === 0 && outputCost === 0,
-      quantization: apiModel.quantization,
-      speed: apiModel.speed,
-    };
-
-    return existing;
-  }
-
-  // New model — build from API data + sensible defaults
-  // Curate models.json manually after discovery for vision, reasoning, thinkingFormat, etc.
   const hasReasoning = apiModel.reasoning_effort === true || apiModel.custom_reasoning === true;
   const inputCost = convertPricing(apiModel.pricing?.prompt);
   const outputCost = convertPricing(apiModel.pricing?.completion);
   const cacheReadCost = convertPricing(apiModel.pricing?.cache_prompt);
   const isFree = inputCost === 0 && outputCost === 0;
+  const displayName = apiModel.name.replace(/^[^:]+:\s*/, '');
 
-  let displayName = apiModel.name.replace(/^[^:]+:\s*/, '');
-
+  // Build from live API pricing — authoritative source.
+  // Only preserve curation fields (reasoning, input, compat) from existing data
+  // since the API doesn't reliably report capabilities.
+  const existing = existingModelsMap[modelId];
   return {
     id: modelId,
-    name: displayName,
-    reasoning: hasReasoning,
-    input: ['text'],
+    name: existing?.name ?? displayName,
+    reasoning: existing?.reasoning ?? hasReasoning,
+    input: existing?.input ?? ['text'],
     cost: {
       input: inputCost,
       output: outputCost,
       cacheRead: cacheReadCost,
-      cacheWrite: 0,
+      cacheWrite: existing?.cost?.cacheWrite ?? 0,
     },
-    contextWindow: apiModel.context_length || 0,
-    maxTokens: apiModel.max_completion_tokens || apiModel.context_length || 0,
+    contextWindow: apiModel.context_length || existing?.contextWindow || 0,
+    maxTokens: apiModel.max_completion_tokens || apiModel.context_length || existing?.maxTokens || 0,
+    compat: existing?.compat,
     _meta: {
       isFree,
       quantization: apiModel.quantization,
