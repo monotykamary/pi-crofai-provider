@@ -178,8 +178,11 @@ const LIVE_FETCH_TIMEOUT_MS = 8000;
 /** Transform a model from the CrofAI /v1/models API. custom_reasoning is unreliable. */
 function transformApiModel(apiModel: any): JsonModel | null {
   const pricing = apiModel.pricing || {};
-  // CrofAI API returns prices as $/million tokens (e.g., "0.28"), parse directly
-  const toPerM = (v: any) => Math.round((typeof v === "string" ? parseFloat(v) : (v || 0)) * 100) / 100;
+  // CrofAI API returns prices as $/million tokens (e.g., "0.28", "0.003"), parse directly.
+  // Round to 6 decimals: the API already returns $/M (no ×1e6), so cent-level rounding
+  // erased sub-cent cache prices like 0.003 → 0. Six decimals is the finest real price
+  // in the ecosystem (e.g. 0.003625) and preserves them.
+  const toPerM = (v: any) => Math.round((typeof v === "string" ? parseFloat(v) : (v || 0)) * 1e6) / 1e6;
   const name = (apiModel.name || apiModel.id).replace(/^[^:]+:\s*/, "");
   return {
     id: apiModel.id,

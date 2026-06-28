@@ -31,8 +31,9 @@ const README_PATH = path.join(__dirname, '..', 'README.md');
 function convertPricing(apiPrice) {
   if (!apiPrice) return 0;
   const price = parseFloat(apiPrice);
-  // Round to avoid floating point precision issues
-  return Math.round(price * 100) / 100;
+  // Round to 6 decimals: API returns $/M directly, so cent-level rounding erased
+  // sub-cent cache prices like 0.003 → 0. Six decimals preserves them.
+  return Math.round(price * 1e6) / 1e6;
 }
 
 /**
