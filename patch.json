@@ -98,6 +98,11 @@
       "supportsReasoningEffort": true
     }
   },
+  "mimo-v2.5-pro": {
+    "cost": {
+      "cacheRead": 0.003
+    }
+  },
   "gemma-4-31b-it": {
     "compat": {
       "thinkingFormat": "openai",
