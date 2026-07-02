@@ -40,12 +40,11 @@
  * @see https://crof.ai/docs
  */
 
-import type { ExtensionAPI, ModelRegistry } from "@earendil-works/pi-coding-agent";
+import { getAgentDir, type ExtensionAPI, type ModelRegistry } from "@earendil-works/pi-coding-agent";
 import modelsData from "./models.json" with { type: "json" };
 import customModelsData from "./custom-models.json" with { type: "json" };
 import patchData from "./patch.json" with { type: "json" };
 import fs from "fs";
-import os from "os";
 import path from "path";
 
 // ─── Usage/Credits Types ──────────────────────────────────────────────────────
@@ -171,7 +170,7 @@ function buildModels(base: JsonModel[], custom: JsonModel[], patch: PatchData): 
 const PROVIDER_ID = "crofai";
 const BASE_URL = "https://crof.ai/v1";
 const MODELS_URL = `${BASE_URL}/models`; // https://crof.ai/v1/models
-const CACHE_DIR = path.join(os.homedir(), ".pi", "agent", "cache");
+const CACHE_DIR = path.join(getAgentDir(), "cache");
 const CACHE_PATH = path.join(CACHE_DIR, `${PROVIDER_ID}-models.json`);
 const LIVE_FETCH_TIMEOUT_MS = 8000;
 
