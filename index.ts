@@ -466,7 +466,7 @@ export default function (pi: ExtensionAPI) {
     updateUsageStatus(ctx);
   });
 
-  pi.on("agent_end", async (_event, ctx) => {
+  pi.on("agent_settled", async (_event, ctx) => {
     const usage = await fetchUsage(cachedApiKey);
     if (usage) {
       sessionCredits = usage.credits;
