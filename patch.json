@@ -2,7 +2,7 @@
   "deepseek-v4-pro": {
     "reasoning": true,
     "thinkingLevelMap": {
-      "xhigh": "max"
+      "max": "max"
     },
     "compat": {
       "thinkingFormat": "openai",
@@ -14,17 +14,17 @@
   },
   "deepseek-v4-flash": {
     "thinkingLevelMap": {
-      "xhigh": "max"
+      "max": "max"
     }
   },
   "deepseek-v4-pro-precision": {
     "thinkingLevelMap": {
-      "xhigh": "max"
+      "max": "max"
     }
   },
   "deepseek-v4-pro-lightning": {
     "thinkingLevelMap": {
-      "xhigh": "max"
+      "max": "max"
     }
   },
   "deepseek-v3.2": {
