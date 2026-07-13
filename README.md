@@ -36,7 +36,7 @@ _A [pi](https://github.com/earendil-works/pi-coding-agent) provider extension wi
 | GLM 4.7 Flash | 203K | ❌ | ✅ | $0.04 | $0.30 |
 | GLM 5 | 203K | ❌ | ✅ | $0.48 | $1.90 |
 | GLM 5.1 | 203K | ❌ | ✅ | $0.45 | $2.15 |
-| GLM 5.2 | 1.0M | ❌ | ✅ | $0.50 | $2.20 |
+| GLM 5.2 | 1.0M | ❌ | ✅ | $0.30 | $1.05 |
 | Greg (Roleplay) | 229K | ❌ | ❌ | $0.10 | $0.30 |
 | Greg 1 Mini | 229K | ❌ | ❌ | $0.07 | $0.15 |
 | Greg 2 Super | 229K | ❌ | ❌ | $1.50 | $5.00 |
