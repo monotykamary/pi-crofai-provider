@@ -289,6 +289,22 @@
     "maxTokens": 262144
   },
   {
+    "id": "kimi-k3",
+    "name": "Kimi K3",
+    "reasoning": true,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 2,
+      "output": 8,
+      "cacheRead": 0.25,
+      "cacheWrite": 0
+    },
+    "contextWindow": 1000000,
+    "maxTokens": 262144
+  },
+  {
     "id": "mimo-v2.5-pro",
     "name": "MiMo-V2.5-Pro",
     "reasoning": true,
