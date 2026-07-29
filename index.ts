@@ -44,6 +44,7 @@ import { getAgentDir, type ExtensionAPI, type ModelRegistry } from "@earendil-wo
 import modelsData from "./models.json" with { type: "json" };
 import customModelsData from "./custom-models.json" with { type: "json" };
 import patchData from "./patch.json" with { type: "json" };
+import deprecatedData from "./deprecated-models.json" with { type: "json" };
 import fs from "fs";
 import path from "path";
 
@@ -270,6 +271,35 @@ function mergeWithEmbedded(liveModels: JsonModel[], embeddedModels: JsonModel[])
   return result;
 }
 
+// Grace period for delisted models. When the provider API stops listing a
+// model, update-models.js moves its last-known definition into
+// deprecated-models.json (stamped with deprecatedAt) instead of dropping it.
+// For 14 days the model keeps working here so in-flight sessions and saved
+// model settings do not break; afterwards it is evicted permanently.
+const DEPRECATED_MODEL_TTL_MS = 14 * 24 * 60 * 60 * 1000;
+
+// Grace-period deprecated models with deprecation metadata stripped.
+function activeDeprecatedModels(): JsonModel[] {
+  const now = Date.now();
+  const result: JsonModel[] = [];
+  for (const entry of Object.values(deprecatedData as Record<string, JsonModel & { deprecatedAt?: string }>)) {
+    if (!entry?.id) continue;
+    const removedAt = Date.parse(entry.deprecatedAt ?? "");
+    if (Number.isNaN(removedAt) || now - removedAt > DEPRECATED_MODEL_TTL_MS) continue;
+    const model = { ...entry } as JsonModel & { deprecatedAt?: string };
+    delete model.deprecatedAt;
+    result.push(model);
+  }
+  return result;
+}
+
+// Append grace-period deprecated models the list does not already have (live data wins).
+function withDeprecated(models: JsonModel[]): JsonModel[] {
+  const seen = new Set(models.map((m) => m.id));
+  const extras = activeDeprecatedModels().filter((m) => !seen.has(m.id));
+  return extras.length > 0 ? [...models, ...extras] : models;
+}
+
 function loadStaleModels(embeddedModels: JsonModel[]): JsonModel[] {
   const cached = loadCachedModels();
   if (!cached || cached.length === 0) return embeddedModels;
@@ -387,7 +417,7 @@ export default function (pi: ExtensionAPI) {
     baseUrl: BASE_URL,
     apiKey: "$CROFAI_API_KEY",
     api: "openai-completions",
-    models: staleModels,
+    models: withDeprecated(staleModels),
   });
 
   /**
@@ -409,7 +439,7 @@ export default function (pi: ExtensionAPI) {
             baseUrl: BASE_URL,
             apiKey: "$CROFAI_API_KEY",
             api: "openai-completions",
-            models: buildModels(freshBase, customModels, patches),
+            models: withDeprecated(buildModels(freshBase, customModels, patches)),
           });
         }
       });

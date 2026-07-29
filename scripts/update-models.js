@@ -243,6 +243,67 @@ function cleanModelForJson(model) {
 /**
  * Main function
  */
+// Grace period for delisted models: update-models.js moves models the API no
+// longer lists into deprecated-models.json (stamped with deprecatedAt) instead
+// of dropping them; the runtime appends them back so sessions and saved model
+// settings keep working, and after 14 days they are evicted permanently.
+const DEPRECATED_MODEL_TTL_MS = 14 * 24 * 60 * 60 * 1000;
+
+/**
+ * Reconcile deprecated-models.json against the freshly fetched model list.
+ * - in old models.json but not the API: moved into the deprecated file
+ *   (deprecatedAt = now; preserved on repeat runs so the grace clock is not reset)
+ * - back in the API: resurrected (dropped from the deprecated file)
+ * - deprecatedAt older than 14 days: evicted permanently
+ * Must run BEFORE the new models.json is written; it reads the old file itself.
+ */
+function updateDeprecatedModels(modelsJsonPath, newModels) {
+  const deprecatedPath = path.join(path.dirname(modelsJsonPath), 'deprecated-models.json');
+
+  let oldModels = [];
+  try {
+    const parsed = JSON.parse(fs.readFileSync(modelsJsonPath, 'utf8'));
+    if (Array.isArray(parsed)) oldModels = parsed;
+  } catch { /* first run: no previous models.json */ }
+
+  let deprecated = {};
+  try {
+    const parsed = JSON.parse(fs.readFileSync(deprecatedPath, 'utf8'));
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) deprecated = parsed;
+  } catch { /* no graveyard yet */ }
+
+  const currentIds = new Set(newModels.map(m => m.id));
+  const now = new Date().toISOString();
+  const added = [];
+  const resurrected = [];
+  const evicted = [];
+
+  for (const old of oldModels) {
+    if (old && old.id && !currentIds.has(old.id) && !deprecated[old.id]) {
+      deprecated[old.id] = { ...old, deprecatedAt: now };
+      added.push(old.id);
+    }
+  }
+
+  for (const [id, entry] of Object.entries(deprecated)) {
+    if (currentIds.has(id)) {
+      delete deprecated[id];
+      resurrected.push(id);
+      continue;
+    }
+    const removedAt = Date.parse(entry && entry.deprecatedAt ? entry.deprecatedAt : '');
+    if (Number.isNaN(removedAt) || Date.now() - removedAt > DEPRECATED_MODEL_TTL_MS) {
+      delete deprecated[id];
+      evicted.push(id);
+    }
+  }
+
+  if (added.length > 0 || resurrected.length > 0 || evicted.length > 0) {
+    fs.writeFileSync(deprecatedPath, JSON.stringify(deprecated, null, 2) + '\n');
+    console.log('Updated deprecated-models.json ' + JSON.stringify({ added, resurrected, evicted }));
+  }
+}
+
 async function main() {
   console.log(`Fetching models from ${MODELS_API_URL}...`);
 
@@ -287,6 +348,8 @@ async function main() {
 
     // Update models.json — pure API data, no patches baked in
     const cleanModels = apiTransformed.map(cleanModelForJson);
+    // Move delisted models to deprecated-models.json BEFORE models.json is overwritten
+    updateDeprecatedModels(MODELS_JSON_PATH, cleanModels);
     fs.writeFileSync(MODELS_JSON_PATH, JSON.stringify(cleanModels, null, 2) + '\n');
     console.log('✓ Updated models.json (pure API data)');
 
