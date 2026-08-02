@@ -15,16 +15,25 @@
   "deepseek-v4-flash": {
     "thinkingLevelMap": {
       "max": "max"
-    }
-  },
-  "deepseek-v4-pro-precision": {
-    "thinkingLevelMap": {
-      "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
     }
   },
   "deepseek-v4-pro-lightning": {
     "thinkingLevelMap": {
       "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
     }
   },
   "deepseek-v3.2": {
@@ -39,17 +48,6 @@
   },
   "glm-5.1": {
     "reasoning": true,
-    "compat": {
-      "thinkingFormat": "openai",
-      "maxTokensField": "max_tokens",
-      "supportsDeveloperRole": true,
-      "supportsStore": false,
-      "supportsReasoningEffort": true
-    }
-  },
-  "glm-5.1-precision": {
-    "reasoning": true,
-    "input": ["text", "image"],
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",
@@ -101,6 +99,23 @@
   "mimo-v2.5-pro": {
     "cost": {
       "cacheRead": 0.003
+    },
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "xhigh": "xhigh",
+      "max": null
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
     }
   },
   "gemma-4-31b-it": {
@@ -122,7 +137,10 @@
     }
   },
   "kimi-k2.5-lightning": {
-    "input": ["text", "image"],
+    "input": [
+      "text",
+      "image"
+    ],
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",
@@ -132,18 +150,10 @@
     }
   },
   "kimi-k2.6": {
-    "input": ["text", "image"],
-    "compat": {
-      "thinkingFormat": "openai",
-      "maxTokensField": "max_tokens",
-      "supportsDeveloperRole": true,
-      "supportsStore": false,
-      "supportsReasoningEffort": true
-    }
-  },
-  "kimi-k2.6-precision": {
-    "reasoning": true,
-    "input": ["text", "image"],
+    "input": [
+      "text",
+      "image"
+    ],
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",
@@ -153,7 +163,10 @@
     }
   },
   "qwen3.5-397b-a17b": {
-    "input": ["text", "image"],
+    "input": [
+      "text",
+      "image"
+    ],
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",
@@ -163,17 +176,10 @@
     }
   },
   "qwen3.5-9b": {
-    "input": ["text", "image"],
-    "compat": {
-      "thinkingFormat": "openai",
-      "maxTokensField": "max_tokens",
-      "supportsDeveloperRole": true,
-      "supportsStore": false,
-      "supportsReasoningEffort": true
-    }
-  },
-  "qwen3.5-9b-chat": {
-    "input": ["text", "image"],
+    "input": [
+      "text",
+      "image"
+    ],
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",
@@ -183,7 +189,98 @@
     }
   },
   "qwen3.6-27b": {
-    "input": ["text", "image"],
+    "input": [
+      "text",
+      "image"
+    ],
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "deepseek-v4-flash-0731": {
+    "thinkingLevelMap": {
+      "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "glm-5.2": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": "high",
+      "medium": "high",
+      "high": "high",
+      "xhigh": null,
+      "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k2.7-code": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "xhigh": null,
+      "max": "high"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k3": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": "low",
+      "medium": null,
+      "high": "high",
+      "xhigh": null,
+      "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
+  },
+  "kimi-k3-eco": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": null,
+      "medium": null,
+      "high": "high",
+      "xhigh": null,
+      "max": "max"
+    },
     "compat": {
       "thinkingFormat": "openai",
       "maxTokensField": "max_tokens",

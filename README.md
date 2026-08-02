@@ -29,6 +29,7 @@ _A [pi](https://github.com/earendil-works/pi-coding-agent) provider extension wi
 |-------|---------|--------|-----------|-----------|------------|
 | DeepSeek V3.2 | 164K | ❌ | ✅ | $0.18 | $0.35 |
 | DeepSeek V4 Flash | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
+| DeepSeek V4 Flash 0731 | 1.0M | ❌ | ✅ | $0.12 | $0.21 |
 | DeepSeek V4 Pro | 1.0M | ❌ | ✅ | $0.35 | $0.80 |
 | DeepSeek V4 Pro (Lightning) | 1.0M | ❌ | ✅ | $0.80 | $1.60 |
 | Gemma 4 31B IT | 262K | ❌ | ✅ | $0.10 | $0.30 |
