@@ -254,7 +254,7 @@
   "kimi-k3": {
     "reasoning": true,
     "thinkingLevelMap": {
-      "off": "none",
+      "off": null,
       "minimal": null,
       "low": "low",
       "medium": null,
@@ -273,7 +273,7 @@
   "kimi-k3-eco": {
     "reasoning": true,
     "thinkingLevelMap": {
-      "off": "none",
+      "off": null,
       "minimal": null,
       "low": null,
       "medium": null,
