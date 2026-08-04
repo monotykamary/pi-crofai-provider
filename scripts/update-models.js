@@ -11,6 +11,10 @@
  * thinking are missing the `custom_reasoning` or `reasoning_effort` flags.
  * patch.json corrects these discrepancies at runtime (index.ts) and is also
  * applied when generating the README table so the docs reflect reality.
+ *
+ * API key: optional. The stored `crofai` credential in ~/.pi/agent/auth.json (or
+ * CROFAI_API_KEY) is sent when it resolves; the public endpoint returned the full
+ * catalog unauthenticated at last check, so running without one is acceptable.
  */
 
 import fs from 'fs';
@@ -308,7 +312,11 @@ async function main() {
   console.log(`Fetching models from ${MODELS_API_URL}...`);
 
   try {
-    const response = await fetch(MODELS_API_URL);
+    const apiKey = resolveApiKey();
+    // crof.ai /v1/models is public and complete (verified against the curated
+    // catalog); send the credential when one resolves, proceed without it.
+    const headers = apiKey ? { Authorization: `Bearer ${apiKey}` } : {};
+    const response = await fetch(MODELS_API_URL, { headers });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
