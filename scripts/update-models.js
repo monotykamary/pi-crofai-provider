@@ -178,7 +178,9 @@ function loadJson(filePath) {
  */
 function formatCost(cost, isFree) {
   if (isFree) return '**Free**';
-  return `$${cost.toFixed(2)}`;
+  if (cost === 0) return '—';
+  if (cost === null || cost === undefined) return '—';
+  return '$' + cost.toFixed(2);
 }
 
 /**
@@ -195,8 +197,8 @@ function formatContextWindow(n) {
  */
 function generateReadmeTable(models) {
   const lines = [
-    '| Model | Context | Vision | Reasoning | Input $/M | Output $/M |',
-    '|-------|---------|--------|-----------|-----------|------------|',
+    '| Model | Context | Vision | Reasoning | Input $/M | Cache Read $/M | Output $/M |',
+    '|-------|---------|--------|-----------|-----------|-----------------|------------|',
   ];
 
   for (const model of models) {
@@ -204,10 +206,11 @@ function generateReadmeTable(models) {
     const context = formatContextWindow(model.contextWindow);
     const vision = model.input.includes('image') ? '✅' : '❌';
     const reasoning = model.reasoning ? '✅' : '❌';
-    const inputCost = formatCost(model.cost.input, model._meta.isFree);
-    const outputCost = formatCost(model.cost.output, model._meta.isFree);
+    const inputCost = formatCost(model.cost.input, model._meta?.isFree);
+    const cacheReadCost = formatCost(model.cost.cacheRead, model._meta?.isFree);
+    const outputCost = formatCost(model.cost.output, model._meta?.isFree);
 
-    lines.push(`| ${name} | ${context} | ${vision} | ${reasoning} | ${inputCost} | ${outputCost} |`);
+    lines.push(`| ${name} | ${context} | ${vision} | ${reasoning} | ${inputCost} | ${cacheReadCost} | ${outputCost} |`);
   }
 
   return lines.join('\n');
@@ -308,6 +311,35 @@ function updateDeprecatedModels(modelsJsonPath, newModels) {
   }
 }
 
+/**
+ * Grace-period deprecated models (deprecatedAt within TTL) with metadata stripped.
+ * Keeps the README table serving models that are delisted but still within their
+ * 14-day grace window.
+ */
+function withDeprecatedForReadme(models) {
+  const deprecatedPath = path.join(path.dirname(MODELS_JSON_PATH), 'deprecated-models.json');
+  let deprecated = {};
+  try {
+    const parsed = JSON.parse(fs.readFileSync(deprecatedPath, 'utf8'));
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) deprecated = parsed;
+  } catch { /* no graveyard yet */ }
+  const now = Date.now();
+  const seen = new Set(models.map(m => m.id));
+  const extras = [];
+  for (const entry of Object.values(deprecated)) {
+    if (!entry || !entry.id || seen.has(entry.id)) continue;
+    const removedAt = Date.parse(entry.deprecatedAt || '');
+    if (Number.isNaN(removedAt) || now - removedAt > DEPRECATED_MODEL_TTL_MS) continue;
+    const m = { ...entry };
+    delete m.deprecatedAt;
+    extras.push(m);
+  }
+  return extras.length > 0 ? [...models, ...extras] : models;
+}
+function resolveApiKey() {
+  return process.env.CROFAI_API_KEY || process.env.CROF_API_KEY || undefined;
+}
+
 async function main() {
   console.log(`Fetching models from ${MODELS_API_URL}...`);
 
@@ -347,8 +379,8 @@ async function main() {
 
     // Sort models: non-free first (by input cost), then free models alphabetically
     apiTransformed.sort((a, b) => {
-      const aFree = a._meta.isFree;
-      const bFree = b._meta.isFree;
+      const aFree = a._meta?.isFree;
+      const bFree = b._meta?.isFree;
       if (aFree && !bFree) return 1;
       if (!aFree && bFree) return -1;
       return a.id.localeCompare(b.id);
@@ -374,7 +406,7 @@ async function main() {
     // Build full model list for README: base → patch → custom
     const customModels = loadJson(CUSTOM_MODELS_JSON_PATH);
     const readmeModels = buildModels(
-      apiTransformed,
+      withDeprecatedForReadme(apiTransformed),
       Array.isArray(customModels) ? customModels : [],
       patch
     );
@@ -390,7 +422,7 @@ async function main() {
     console.log(`Reasoning models (patched): ${readmeModels.filter(m => m.reasoning).length}`);
     console.log(`Reasoning models (API raw):  ${apiTransformed.filter(m => m.reasoning).length}`);
     console.log(`Vision models: ${readmeModels.filter(m => m.input.includes('image')).length}`);
-    console.log(`Free models: ${readmeModels.filter(m => m._meta.isFree).length}`);
+    console.log(`Free models: ${readmeModels.filter(m => m._meta?.isFree).length}`);
 
     const newIds = new Set(apiTransformed.map(m => m.id));
     const oldIds = new Set(existingModels.map(m => m.id));
