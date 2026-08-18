@@ -1,6 +1,6 @@
 {
   "name": "pi-crof-provider",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "packageManager": "pnpm@11.20.0",
   "description": "CrofAI provider extension for pi - Access Kimi, GLM, Qwen, DeepSeek, MiniMax, and Gemma models through the CrofAI API",
   "type": "module",
@@ -33,9 +33,5 @@
     "extensions": [
       "./index.ts"
     ]
-  },
-  "files": [
-    "README.md",
-    "LICENSE"
-  ]
+  }
 }
