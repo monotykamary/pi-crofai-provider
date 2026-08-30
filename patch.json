@@ -288,5 +288,24 @@
       "supportsStore": false,
       "supportsReasoningEffort": true
     }
+  },
+  "glm-5.3-flash": {
+    "reasoning": true,
+    "thinkingLevelMap": {
+      "off": "none",
+      "minimal": null,
+      "low": "low",
+      "medium": null,
+      "high": "high",
+      "xhigh": null,
+      "max": "max"
+    },
+    "compat": {
+      "thinkingFormat": "openai",
+      "maxTokensField": "max_tokens",
+      "supportsDeveloperRole": true,
+      "supportsStore": false,
+      "supportsReasoningEffort": true
+    }
   }
 }
